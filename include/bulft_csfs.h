@@ -27,6 +27,18 @@ namespace BULFT
         mySpinOrbs = old_csf.mySpinOrbs;
       }
 
+      double Genealogical ( const std::vector<double> & T )
+      {
+        if ( T.size() == mySpinOrbs.size() )
+        {
+          return 1.1;
+        }
+        else 
+        {
+          return 0.0;
+        }
+      }
+
     private:
       int myNumElectrons;
       double myS;
