@@ -22,6 +22,7 @@ namespace BULFT
       int myNumElectrons;
       double myS;
       double myM;
+      std::vector<double> myCoeffs;
       std::vector<BUlftORB> mySpinOrbs;
   };
 
