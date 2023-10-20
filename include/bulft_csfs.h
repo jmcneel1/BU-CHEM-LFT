@@ -18,6 +18,15 @@ namespace BULFT
         myM = 0;
       }
 
+      BUlftCSF(const BUlftCSF & old_csf)
+      {
+        myS = old_csf.myS;
+        myM = old_csf.myM;
+        myNumElectrons = old_csf myNumElectrons;
+        myCoeffs = old_csf.myCoeffs;
+        mySpinOrbs = old_csf.mySpinOrbs;
+      }
+
     private:
       int myNumElectrons;
       double myS;
