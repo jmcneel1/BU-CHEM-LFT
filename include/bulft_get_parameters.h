@@ -19,6 +19,12 @@ namespace BULFT
     std::cout << "0: xz(alpha)\n1: xz(beta)\nyz(alpha)\nyz(beta)";
     std::cout << "How many electrons are in your system? ";
     std::cin >> nel;
+    std::vector<short> orbs(nel);
+    std::cout << "What are the orbitals occupied in the Ms = S spin project of  your ground state (space separated)? ";
+    for ( unsigned int i = 0; i < nel; i++ )
+    {
+      std::cin >> orbs[i];
+    }
   }
 }
 
