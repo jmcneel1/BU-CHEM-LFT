@@ -6,6 +6,8 @@
 
 int main ()
 {
+  // First we prompt user for the system
+  
   BULFT::BUlftSys system = BULFT::GetParameters();
   std::vector<BULFT::BUlftCSF> csfs = BULFT::BUlftCSFGen(system);
   BULFT::PerformLFT(system,csfs);
