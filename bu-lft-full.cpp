@@ -2,6 +2,14 @@
 #include <iomanip>
 #include <vector>
 #include <cmath>
+#include <string>
+
+struct CSFType
+{
+    int count;
+    std::string dets;
+    std::string coeffs;
+};
 
 //  t is true if +1/2, false if -1/2
 // sigma is true if +1/2, false if -1/2
@@ -177,6 +185,110 @@ void GenerateDeterminants ( std::vector< std::vector <bool> > & dets,
 
 }
 
+void SetDetMs (
+                const std::vector<std::vector<bool>> & dets,
+                std::vector<short> & ms,
+                const int & n_dets
+             )
+{
+    for ( unsigned int i = 0; i < n_dets; i++ )
+    {
+        short tms(0);
+        for ( unsigned int j = 0; j < 10; j++ )
+        {
+            if ( dets[i][j] ) tms+=std::pow(-1,j);
+        }
+        ms[i] = tms;
+    }
+}
+
+void SetDetConfig (
+                    const std::vector<std::vector<bool>> & dets,
+                    std::vector<std::vector<short>> & configs,
+                    const int & n_dets
+                  )
+{
+    for ( unsigned int i = 0; i < n_dets; i++ )
+    {
+        for ( unsigned int j = 0; j < 5; j++ )
+        {
+            if ( dets[i][j*2] ) configs[i][j]++;
+            if ( dets[i][j*2+1] ) configs[i][j]++;
+        }
+    }
+}
+
+void GenerateCoeffs ( 
+                      CSFType & tcsf,
+                      const std::vector<std::vector<bool>> & dets,
+                      const short & spin
+                    )
+{
+    double total;
+    for ( unsigned int i = 0; i < tcsf.count; i++ )
+    {
+        bool t; bool sigma; short st2; short mt2;
+        total = 1.0;
+        for ( unsigned int j = 0; j < 10; j++ )
+        {
+            if ( )
+        }
+    }
+}
+
+void GenerateCSFS (
+                    std::vector<CSFType> & csfs, 
+                    const std::vector<short> & spins,
+                    const std::vector<int> & ncsf,
+                    const std::vector<std::vector<bool>> & dets,
+                    const std::vector<std::vector<short>> & configs,
+                    const std::vector<short> & det_ms,
+                    const int & n_dets
+                  )
+{
+    for ( auto spin : spins )
+    {
+        std::vector<bool> found(n_dets,false);
+        std::vector<short> tconfig(5,0);
+        for ( unsigned int i = 0; i < n_dets; i++ )
+        {
+            if ( ( spin == det_ms[i] ) && ( !found[i] ) )
+            {
+                found[i] = true;
+                CSFType tcsf;
+                tcsf.count = 1;
+                tcsf.dets=std::to_string(i);
+                tcsf.coeffs="1";
+                for ( unsigned int j = i+1; j < n_dets; j++ )
+                {
+                    if ( spin == det_ms[j] && ! found[j] )
+                    {
+                        bool same = true;
+                        for ( unsigned int k = 0; k < 5; k++ )
+                        {
+                            if ( configs[i][k] != configs[j][k] )
+                            {
+                                same = false;
+                                break;
+                            }
+                        }
+                        if ( same )
+                        {
+                            found[j] = true;
+                            tcsf.count++;
+                            tcsf.dets+="-"+std::to_string(j);
+                            tcsf.coeffs+="_1";
+                        }
+                    }
+                }
+                GenerateCoeffs(tcsf,dets,spin);
+                csfs[index] = tcsf;
+                index++;
+            }
+        }
+    }
+}
+
 int main ()
 {
     short nel, s(0);
@@ -206,6 +318,7 @@ int main ()
     std::cout << "S: ";
     std::cout << std::fixed << std::setprecision(1) << float (s/2.) << "\n\n";
     int min = std::min(int(nel),10-nel);
+    int total_csf_count = 0;
 
     for ( int i = min; i >= 0; i-=2 )
     {
@@ -214,6 +327,7 @@ int main ()
             int temp = NumCSF(i,nel);
             spins.push_back(i);
             ncsf.push_back(temp);
+            total_csf_count += temp;
             std::cout << "Number of CSFs (S=" << float (i/2.) << "): " << temp << "\n";
         }
     }
@@ -227,6 +341,13 @@ int main ()
     std::vector<short> det_ms(n_dets, 0);
 
     GenerateDeterminants(dets,nel);
+    SetDetMs(dets,det_ms,n_dets);
+    SetDetConfig(dets,configs,n_dets);
+
+    CSFType dummy;
+    std::vector<CSFType> csfs(total_csf_count,dummy);
+
+    GenerateCSFS(csfs,spins,ncsf,dets,configs,det_ms,n_dets);
 
     return 0;
 }
