@@ -3,6 +3,8 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <algorithm>
+#include <sstream>
 
 struct CSFType
 {
@@ -224,14 +226,36 @@ void GenerateCoeffs (
                       const short & spin
                     )
 {
-    double total;
-    for ( unsigned int i = 0; i < tcsf.count; i++ )
+    if ( tcsf.count > 1 )
     {
-        bool t; bool sigma; short st2; short mt2;
-        total = 1.0;
-        for ( unsigned int j = 0; j < 10; j++ )
+        double total;
+        int opos(0), npos(0);
+        for ( unsigned int i = 0; i < tcsf.count; i++ )
         {
-            if ( )
+            npos = tcsf.dets.find('-',i+1);
+            std::string tindex_s = tcsf.dets.substr(opos,npos);
+            opos=npos+1;
+            int tindex;
+            std::stringstream ss;
+            ss << tindex_s;
+            ss >> tindex;
+            std::cout << spin << " " << npos << " " << tcsf.dets << " " << tindex << "\n";
+            bool t; bool sigma; short st2(0); short mt2(0); bool iscsfgood(false);
+            total = 1.0;
+            while ( ! iscsfgood )
+            {
+                for ( unsigned int j = 0; j < 10; j++ )
+                {
+                    if ( dets[tindex][j] )
+                    {
+                        // if ( j%2 == 1 )
+                        // {
+                        //    total*=Clebsch(true,s)
+                        // }
+                    }
+                }
+                iscsfgood = true;
+            }
         }
     }
 }
@@ -248,42 +272,46 @@ void GenerateCSFS (
 {
     for ( auto spin : spins )
     {
-        std::vector<bool> found(n_dets,false);
-        std::vector<short> tconfig(5,0);
-        for ( unsigned int i = 0; i < n_dets; i++ )
+        for ( short ms=spin; ms >= -spin; ms-=2 )
         {
-            if ( ( spin == det_ms[i] ) && ( !found[i] ) )
+            std::vector<bool> found(n_dets,false);
+            std::vector<short> tconfig(5,0);
+            int index = 0;
+            for ( unsigned int i = 0; i < n_dets; i++ )
             {
-                found[i] = true;
-                CSFType tcsf;
-                tcsf.count = 1;
-                tcsf.dets=std::to_string(i);
-                tcsf.coeffs="1";
-                for ( unsigned int j = i+1; j < n_dets; j++ )
+                if ( ( ms == det_ms[i] ) && ( !found[i] ) )
                 {
-                    if ( spin == det_ms[j] && ! found[j] )
+                    CSFType tcsf;
+                    tcsf.count = 1;
+                    tcsf.dets=std::to_string(i);
+                    tcsf.coeffs="1";
+                    found[i] = true;
+                    for ( unsigned int j = i+1; j < n_dets; j++ )
                     {
-                        bool same = true;
-                        for ( unsigned int k = 0; k < 5; k++ )
+                        if ( spin == det_ms[j] && ! found[j] )
                         {
-                            if ( configs[i][k] != configs[j][k] )
+                            bool same = true;
+                            for ( unsigned int k = 0; k < 5; k++ )
                             {
-                                same = false;
-                                break;
+                                if ( configs[i][k] != configs[j][k] )
+                                {
+                                    same = false;
+                                    break;
+                                }
+                            }
+                            if ( same )
+                            {
+                                found[j] = true;
+                                tcsf.count++;
+                                tcsf.dets+="-"+std::to_string(j);
+                                tcsf.coeffs+="_1";
                             }
                         }
-                        if ( same )
-                        {
-                            found[j] = true;
-                            tcsf.count++;
-                            tcsf.dets+="-"+std::to_string(j);
-                            tcsf.coeffs+="_1";
-                        }
                     }
+                    GenerateCoeffs(tcsf,dets,spin);
+                    csfs[index] = tcsf;
+                    index++;
                 }
-                GenerateCoeffs(tcsf,dets,spin);
-                csfs[index] = tcsf;
-                index++;
             }
         }
     }
