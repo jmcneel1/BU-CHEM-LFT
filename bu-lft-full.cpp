@@ -223,7 +223,8 @@ void SetDetConfig (
 void GenerateCoeffs ( 
                       CSFType & tcsf,
                       const std::vector<std::vector<bool>> & dets,
-                      const short & spin
+                      const short & spin,
+                      const std::vector<bool> & cpl
                     )
 {
     if ( tcsf.count > 1 )
@@ -232,14 +233,13 @@ void GenerateCoeffs (
         int opos(0), npos(0);
         for ( unsigned int i = 0; i < tcsf.count; i++ )
         {
-            npos = tcsf.dets.find('-',i+1);
+            npos = tcsf.dets.find('-',opos+1);
             std::string tindex_s = tcsf.dets.substr(opos,npos);
             opos=npos+1;
             int tindex;
             std::stringstream ss;
             ss << tindex_s;
             ss >> tindex;
-            std::cout << spin << " " << npos << " " << tcsf.dets << " " << tindex << "\n";
             bool t; bool sigma; short st2(0); short mt2(0); bool iscsfgood(false);
             total = 1.0;
             while ( ! iscsfgood )
@@ -260,6 +260,31 @@ void GenerateCoeffs (
     }
 }
 
+std::vector<std::vector<bool>> GenerateCouplingVecs( short spin, short nel)
+{
+    short unp;
+    std::vector<std::vector<bool>> coups;
+    if ( nel > 5 ) unp = 10-nel;
+    else unp = nel;
+    for ( int k = unp; k >= spin; k-=2 )
+    {
+        int total = 1 << k;
+        std::vector<bool> temp(k);
+        for ( unsigned int i = 0; i < total; i++ )
+        {
+            short temp_spin(0);
+            for ( int j = k - 1; j >= 0; j-- )
+            {
+                temp[j] = ((i >> j) & 1) != 0;
+                temp_spin += (temp[j]) ? 1 : -1;
+                if ( temp_spin < 0 ) break;
+            }
+            if ( temp_spin == spin ) coups.push_back(temp);
+        }
+    }
+    return coups;
+}
+
 void GenerateCSFS (
                     std::vector<CSFType> & csfs, 
                     const std::vector<short> & spins,
@@ -267,50 +292,64 @@ void GenerateCSFS (
                     const std::vector<std::vector<bool>> & dets,
                     const std::vector<std::vector<short>> & configs,
                     const std::vector<short> & det_ms,
-                    const int & n_dets
+                    const int & n_dets,
+                    const short & nel
                   )
 {
     for ( auto spin : spins )
     {
-        for ( short ms=spin; ms >= -spin; ms-=2 )
+        std::vector<std::vector<bool>> coupling_vecs = GenerateCouplingVecs(spin,nel);
+        std::cout << "There are " << coupling_vecs.size() << " coupling vectors for S=" << double(spin/2.0) << "\n";
+        for ( auto cpl : coupling_vecs )
         {
-            std::vector<bool> found(n_dets,false);
-            std::vector<short> tconfig(5,0);
-            int index = 0;
-            for ( unsigned int i = 0; i < n_dets; i++ )
+            for ( short ms=spin; ms >= -spin; ms-=2 )
             {
-                if ( ( ms == det_ms[i] ) && ( !found[i] ) )
+                std::vector<bool> found(n_dets,false);
+                std::vector<short> tconfig(5,0);
+                int index = 0;
+                for ( unsigned int i = 0; i < n_dets; i++ )
                 {
-                    CSFType tcsf;
-                    tcsf.count = 1;
-                    tcsf.dets=std::to_string(i);
-                    tcsf.coeffs="1";
-                    found[i] = true;
-                    for ( unsigned int j = i+1; j < n_dets; j++ )
+                    if ( ( ms == det_ms[i] ) && ( !found[i] ) )
                     {
-                        if ( spin == det_ms[j] && ! found[j] )
+                        short unp(0);
+                        for ( unsigned int j = 0; j < 5; j++ )
                         {
-                            bool same = true;
-                            for ( unsigned int k = 0; k < 5; k++ )
+                            if ( configs[i][j] == 1 ) unp++;
+                        }
+                        if ( cpl.size() == unp )
+                        {
+                            CSFType tcsf;
+                            tcsf.count = 1;
+                            tcsf.dets=std::to_string(i);
+                            tcsf.coeffs="1";
+                            found[i] = true;
+                            for ( unsigned int j = i+1; j < n_dets; j++ )
                             {
-                                if ( configs[i][k] != configs[j][k] )
+                                if ( spin == det_ms[j] && ! found[j] )
                                 {
-                                    same = false;
-                                    break;
+                                    bool same = true;
+                                    for ( unsigned int k = 0; k < 5; k++ )
+                                    {
+                                        if ( configs[i][k] != configs[j][k] )
+                                        {
+                                            same = false;
+                                            break;
+                                        }
+                                    }
+                                    if ( same )
+                                    {
+                                        found[j] = true;
+                                        tcsf.count++;
+                                        tcsf.dets+="-"+std::to_string(j);
+                                        tcsf.coeffs+="_1";
+                                    }
                                 }
                             }
-                            if ( same )
-                            {
-                                found[j] = true;
-                                tcsf.count++;
-                                tcsf.dets+="-"+std::to_string(j);
-                                tcsf.coeffs+="_1";
-                            }
+                            GenerateCoeffs(tcsf,dets,spin,cpl);
+                            csfs[index] = tcsf;
+                            index++;
                         }
                     }
-                    GenerateCoeffs(tcsf,dets,spin);
-                    csfs[index] = tcsf;
-                    index++;
                 }
             }
         }
@@ -375,7 +414,7 @@ int main ()
     CSFType dummy;
     std::vector<CSFType> csfs(total_csf_count,dummy);
 
-    GenerateCSFS(csfs,spins,ncsf,dets,configs,det_ms,n_dets);
+    GenerateCSFS(csfs,spins,ncsf,dets,configs,det_ms,n_dets,nel);
 
     return 0;
 }
