@@ -228,16 +228,15 @@ void GenerateCoeffs (
                       const std::vector<bool> & cpl
                     )
 {
-    for ( unsigned int i = 0; i < cpl.size(); i++ ) std::cout << cpl[i];
-    std::cout << "\n";
     if ( tcsf.count > 1 )
     {
+        tcsf.coeffs = "";
         double total;
         int opos(0), npos(0);
         for ( unsigned int i = 0; i < tcsf.count; i++ )
         {
             npos = tcsf.dets.find('-',opos+1);
-            std::string tindex_s = tcsf.dets.substr(opos,npos);
+            std::string tindex_s = tcsf.dets.substr(opos,npos-opos);
             opos=npos+1;
             int tindex;
             std::stringstream ss;
@@ -247,30 +246,30 @@ void GenerateCoeffs (
             total = 1.0;
             for ( unsigned int j = 0; j < 5; j++ )
             {
-                std::cout << config[j];
                 if ( config[j] == 1 )
                 {
                     if ( cpl[cpl_index] ) st2++;
                     else st2--;
-                    // std::cout << "S" << st2;
                     if ( dets[tindex][2*j] )
                     {
                         mt2++;
-                        // std::cout << "M" << mt2;
                         total*=Clebsch(cpl[cpl_index],true,st2,mt2);
                         cpl_index++;
                     }
                     else
                     {
                         mt2--;
-                        // std::cout << "M" << mt2;
                         total*=Clebsch(cpl[cpl_index],false,st2,mt2);
                         cpl_index++;
                     }
                 }
             }
-            std::cout << "\n";
-            // std::cout << std::fixed << std::setprecision(5) << total << "\n";
+            ss.clear(); ss.str("");
+            std::string tot_str;
+            ss << std::fixed << std::setprecision(4) << total;
+            ss >> tot_str;
+            tcsf.coeffs += tot_str;
+            if ( i <  (tcsf.count -1) ) tcsf.coeffs+="_";
         }
     }
 }
@@ -290,8 +289,8 @@ std::vector<std::vector<bool>> GenerateCouplingVecs( short spin, short nel)
             short temp_spin(0);
             for ( int j = k - 1; j >= 0; j-- )
             {
-                temp[j] = ((i >> j) & 1) != 0;
-                temp_spin += (temp[j]) ? 1 : -1;
+                temp[k-j-1] = ((i >> j) & 1) != 0;
+                temp_spin += (temp[k-j-1]) ? 1 : -1;
                 if ( temp_spin < 0 ) break;
             }
             if ( temp_spin == spin ) coups.push_back(temp);
@@ -303,7 +302,6 @@ std::vector<std::vector<bool>> GenerateCouplingVecs( short spin, short nel)
 void GenerateCSFS (
                     std::vector<CSFType> & csfs, 
                     const std::vector<short> & spins,
-                    const std::vector<int> & ncsf,
                     const std::vector<std::vector<bool>> & dets,
                     const std::vector<std::vector<short>> & configs,
                     const std::vector<short> & det_ms,
@@ -311,18 +309,30 @@ void GenerateCSFS (
                     const short & nel
                   )
 {
-    std::cout << Clebsch(true,true,1,1)*Clebsch(true,false,2,0) << "\n";
+    int index = 0;
     for ( auto spin : spins )
     {
         std::vector<std::vector<bool>> coupling_vecs = GenerateCouplingVecs(spin,nel);
         std::cout << "There are " << coupling_vecs.size() << " coupling vectors for S=" << double(spin/2.0) << "\n";
+        std::cout << "   ";
+        for ( unsigned int i = 0; i < coupling_vecs.size(); i++ )
+        {
+            std::cout << " |";
+            for ( unsigned int j = 0; j < coupling_vecs[i].size(); j++ )
+            {
+                if ( coupling_vecs[i][j] ) std::cout << "+";
+                else std::cout << "-";
+            }
+            std::cout << ">";
+        }
+        std::cout << "\n\n";
         for ( auto cpl : coupling_vecs )
         {
             for ( short ms=spin; ms >= -spin; ms-=2 )
             {
                 std::vector<bool> found(n_dets,false);
                 std::vector<short> tconfig(5,0);
-                int index = 0;
+                
                 for ( unsigned int i = 0; i < n_dets; i++ )
                 {
                     if ( ( ms == det_ms[i] ) && ( !found[i] ) )
@@ -337,11 +347,11 @@ void GenerateCSFS (
                             CSFType tcsf;
                             tcsf.count = 1;
                             tcsf.dets=std::to_string(i);
-                            tcsf.coeffs="1";
+                            tcsf.coeffs="1.0000";
                             found[i] = true;
                             for ( unsigned int j = i+1; j < n_dets; j++ )
                             {
-                                if ( spin == det_ms[j] && ! found[j] )
+                                if ( ms == det_ms[j] && ! found[j] )
                                 {
                                     bool same = true;
                                     for ( unsigned int k = 0; k < 5; k++ )
@@ -357,7 +367,7 @@ void GenerateCSFS (
                                         found[j] = true;
                                         tcsf.count++;
                                         tcsf.dets+="-"+std::to_string(j);
-                                        tcsf.coeffs+="_1";
+                                        tcsf.coeffs+="_1.0000";
                                     }
                                 }
                             }
@@ -381,7 +391,6 @@ int main ()
 
     std::vector<short> orbs(nel);
     std::vector<short> spins;
-    std::vector<int> ncsf;
 
     std::cout << "\nHere are the orbital labels:\n";
     std::cout << "0: xz(alpha)\n1: xz(beta)\n2: yz(alpha)\n";
@@ -409,8 +418,7 @@ int main ()
         {
             int temp = NumCSF(i,nel);
             spins.push_back(i);
-            ncsf.push_back(temp);
-            total_csf_count += temp;
+            total_csf_count += temp*(i+1);
             std::cout << "Number of CSFs (S=" << float (i/2.) << "): " << temp << "\n";
         }
     }
@@ -430,7 +438,51 @@ int main ()
     CSFType dummy;
     std::vector<CSFType> csfs(total_csf_count,dummy);
 
-    GenerateCSFS(csfs,spins,ncsf,dets,configs,det_ms,n_dets,nel);
+    GenerateCSFS(csfs,spins,dets,configs,det_ms,n_dets,nel);
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        std::cout << "CSF " << std::setw(4) << i+1 << ": ";
+        int opos(0), npos(0), copos(0), cnpos(0), dindex;
+        for ( unsigned int j = 0; j < csfs[i].count; j++ )
+        {
+            std::stringstream ss;
+            cnpos = csfs[i].coeffs.find('_',copos+1);
+            std::cout << csfs[i].coeffs.substr(copos,cnpos-copos) << " |";
+            copos = cnpos+1;
+            npos = csfs[i].dets.find('-',opos+1);
+            ss << csfs[i].dets.substr(opos,npos-opos);
+            ss >> dindex;
+            std::cout << "xz(";
+            if ( dets[dindex][0] && dets[dindex][1] ) std::cout << "2)";
+            else if ( dets[dindex][0] ) std::cout << "a)";
+            else if ( dets[dindex][1] ) std::cout << "b)";
+            else std::cout << "0)";
+            std::cout << "yz(";
+            if ( dets[dindex][2] && dets[dindex][3] ) std::cout << "2)";
+            else if ( dets[dindex][2] ) std::cout << "a)";
+            else if ( dets[dindex][3] ) std::cout << "b)";
+            else std::cout << "0)";
+            std::cout << "xy(";
+            if ( dets[dindex][4] && dets[dindex][5] ) std::cout << "2)";
+            else if ( dets[dindex][4] ) std::cout << "a)";
+            else if ( dets[dindex][5] ) std::cout << "b)";
+            else std::cout << "0)";
+            std::cout << "z2(";
+            if ( dets[dindex][6] && dets[dindex][7] ) std::cout << "2)";
+            else if ( dets[dindex][6] ) std::cout << "a)";
+            else if ( dets[dindex][7] ) std::cout << "b)";
+            else std::cout << "0)";
+            std::cout << "x2y2(";
+            if ( dets[dindex][8] && dets[dindex][9] ) std::cout << "2)";
+            else if ( dets[dindex][8] ) std::cout << "a)";
+            else if ( dets[dindex][9] ) std::cout << "b)";
+            else std::cout << "0)";
+            std::cout << ">  ";
+            opos = npos+1;
+        }
+        std::cout << "\n";
+    }
 
     return 0;
 }
