@@ -223,10 +223,13 @@ void SetDetConfig (
 void GenerateCoeffs ( 
                       CSFType & tcsf,
                       const std::vector<std::vector<bool>> & dets,
+                      const std::vector<short> & config,
                       const short & spin,
                       const std::vector<bool> & cpl
                     )
 {
+    for ( unsigned int i = 0; i < cpl.size(); i++ ) std::cout << cpl[i];
+    std::cout << "\n";
     if ( tcsf.count > 1 )
     {
         double total;
@@ -240,22 +243,34 @@ void GenerateCoeffs (
             std::stringstream ss;
             ss << tindex_s;
             ss >> tindex;
-            bool t; bool sigma; short st2(0); short mt2(0); bool iscsfgood(false);
+            bool t; bool sigma; short st2(0); short mt2(0); short cpl_index(0);
             total = 1.0;
-            while ( ! iscsfgood )
+            for ( unsigned int j = 0; j < 5; j++ )
             {
-                for ( unsigned int j = 0; j < 10; j++ )
+                std::cout << config[j];
+                if ( config[j] == 1 )
                 {
-                    if ( dets[tindex][j] )
+                    if ( cpl[cpl_index] ) st2++;
+                    else st2--;
+                    // std::cout << "S" << st2;
+                    if ( dets[tindex][2*j] )
                     {
-                        // if ( j%2 == 1 )
-                        // {
-                        //    total*=Clebsch(true,s)
-                        // }
+                        mt2++;
+                        // std::cout << "M" << mt2;
+                        total*=Clebsch(cpl[cpl_index],true,st2,mt2);
+                        cpl_index++;
+                    }
+                    else
+                    {
+                        mt2--;
+                        // std::cout << "M" << mt2;
+                        total*=Clebsch(cpl[cpl_index],false,st2,mt2);
+                        cpl_index++;
                     }
                 }
-                iscsfgood = true;
             }
+            std::cout << "\n";
+            // std::cout << std::fixed << std::setprecision(5) << total << "\n";
         }
     }
 }
@@ -296,6 +311,7 @@ void GenerateCSFS (
                     const short & nel
                   )
 {
+    std::cout << Clebsch(true,true,1,1)*Clebsch(true,false,2,0) << "\n";
     for ( auto spin : spins )
     {
         std::vector<std::vector<bool>> coupling_vecs = GenerateCouplingVecs(spin,nel);
@@ -345,7 +361,7 @@ void GenerateCSFS (
                                     }
                                 }
                             }
-                            GenerateCoeffs(tcsf,dets,spin,cpl);
+                            GenerateCoeffs(tcsf,dets,configs[i],spin,cpl);
                             csfs[index] = tcsf;
                             index++;
                         }
