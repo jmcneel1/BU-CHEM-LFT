@@ -397,9 +397,9 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
         ss.clear(); ss.str("");
         ss << lhs.dets.substr(lopos,lnpos-lopos);
         ss >> lindex;
-        lncpos = lhs.dets.find('_',locpos+1);
+        lncpos = lhs.coeffs.find('_',locpos+1);
         ss.clear(); ss.str("");
-        ss << lhs.dets.substr(locpos,lncpos-locpos);
+        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
         ss >> lcoeff;
         for ( unsigned int j = 0; j < rhs.count; j++)
         {
@@ -409,74 +409,515 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
             ss.clear(); ss.str("");
             ss << rhs.dets.substr(ropos,rnpos-ropos);
             ss >> rindex;
-            rncpos = rhs.dets.find('_',rocpos+1);
+            rncpos = rhs.coeffs.find('_',rocpos+1);
             ss.clear(); ss.str("");
-            ss << rhs.dets.substr(rocpos,rncpos-rocpos);
+            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
             ss >> rcoeff;
             for ( unsigned int k = 0; k < 10; k++ )
             {
+                std::vector<bool> temp = dets[rindex];
                 if ( k == 0 ) 
                 {
-                    if ( dets[lindex][4] && dets[rindex][0] && (!dets[rindex][4]) ) 
+                    if ( temp[0] )
                     {
-                        itotal = itotal - 1.0;
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 1 )
                 {
-                    if ( dets[lindex][5] && dets[rindex][1] && (!dets[rindex][5]) ) 
+                    if ( temp[1] )
                     {
-                        itotal = itotal - 1.0;
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 2 )
                 {
-                    if ( dets[lindex][6] && dets[rindex][2] && (!dets[rindex][6]) ) 
+                    if ( temp[2] )
                     {
-                        itotal = itotal + std::pow(3,0.5);
-                    }
-                    if ( dets[lindex][8] && dets[rindex][2] && (!dets[rindex][8]) ) 
-                    {
-                        itotal = itotal + 1.0;
+                        if ( !temp[6] )
+                        {
+                            temp[6] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                            temp[6] = false; temp[2] = true;
+                        }
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 3 )
                 {
-                    if ( dets[lindex][7] && dets[rindex][3] && (!dets[rindex][7]) ) 
+                    if ( temp[3] )
                     {
-                        itotal = itotal + std::pow(3,0.5);
-                    }
-                    if ( dets[lindex][9] && dets[rindex][3] && (!dets[rindex][9]) ) 
-                    {
-                        itotal = itotal + 1.0;
+                        if ( !temp[7] )
+                        {
+                            temp[7] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                            temp[7] = false; temp[3] = true;
+                        }
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 4 )
                 {
-                    if ( dets[lindex][0] && dets[rindex][4] && (!dets[rindex][0]) ) 
+                    if ( temp[4] )
                     {
-                        itotal = itotal + 1.0;
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 5 )
                 {
-                    if ( dets[lindex][1] && dets[rindex][5] && (!dets[rindex][1]) ) 
+                    if ( temp[5] )
                     {
-                        itotal = itotal + 1.0;
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
                 else if ( k == 6 )
                 {
-                    if ( dets[lindex][2] && dets[rindex][6] && (!dets[rindex][2]) ) 
+                    if ( temp[6] )
                     {
-                        itotal = itotal - std::pow(3,0.5);
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[6] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                        }
                     }
                 }
                 else if ( k == 7 )
                 {
-                    if ( dets[lindex][3] && dets[rindex][7] && (!dets[rindex][3]) ) 
+                    if ( temp[7] )
                     {
-                        itotal = itotal - std::pow(3,0.5);
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[7] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
+}
+
+std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        double lcoeff(0.0);
+        lnpos = lhs.dets.find('-',lopos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.dets.substr(lopos,lnpos-lopos);
+        ss >> lindex;
+        lncpos = lhs.coeffs.find('_',locpos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
+        ss >> lcoeff;
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            double rcoeff(0.0);
+            rnpos = rhs.dets.find('-',ropos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.dets.substr(ropos,rnpos-ropos);
+            ss >> rindex;
+            rncpos = rhs.coeffs.find('_',rocpos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
+            ss >> rcoeff;
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                std::vector<bool> temp = dets[rindex];
+                if ( k == 0 ) 
+                {
+                    if ( temp[0] )
+                    {
+                        if ( !temp[6] )
+                        {
+                            temp[6] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                            temp[0] = true; temp[6] = false;
+                        }
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( temp[1] )
+                    {
+                        if ( !temp[7] )
+                        {
+                            temp[7] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                            temp[1] = true; temp[7] = false;
+                        }
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( temp[2] )
+                    {
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( temp[3] )
+                    {
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( temp[4] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( temp[5] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 6 )
+                {
+                    if ( temp[6] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[6] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 7 )
+                {
+                    if ( temp[7] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[7] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
+}
+
+std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        double lcoeff(0.0);
+        lnpos = lhs.dets.find('-',lopos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.dets.substr(lopos,lnpos-lopos);
+        ss >> lindex;
+        lncpos = lhs.coeffs.find('_',locpos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
+        ss >> lcoeff;
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            double rcoeff(0.0);
+            rnpos = rhs.dets.find('-',ropos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.dets.substr(ropos,rnpos-ropos);
+            ss >> rindex;
+            rncpos = rhs.coeffs.find('_',rocpos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
+            ss >> rcoeff;
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                std::vector<bool> temp = dets[rindex];
+                if ( k == 0 ) 
+                {
+                    if ( temp[0] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( temp[1] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( temp[2] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( temp[3] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( temp[4] )
+                    {
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 2 * lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( temp[5] )
+                    {
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 2 * lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 2 * lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 2 * lcoeff * rcoeff;
+                            }
+                        }
                     }
                 }
             }
@@ -587,7 +1028,25 @@ int main ()
         }
         std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
     }
-    LX(csfs[0],csfs[1],dets);
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        if ( csfs[i].spin == s )
+        {
+            std::vector<bool> tdet(10,false);
+            std::vector<short> tconfig(5,0);
+            for ( auto j : orbs )
+            {
+                tdet[j] = true;
+            }
+        }
+    }
+
+    std::cout << "\n\nThe Ground State CSFs are ";
+
+    std::cout << "\n\nNow evaluating the G-Tensor:\n\n";
+    std::cout << "GXX:\n";
+    
 
     return 0;
 }
