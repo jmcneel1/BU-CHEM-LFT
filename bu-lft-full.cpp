@@ -5,10 +5,12 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <complex>
 
 struct CSFType
 {
     int count;
+    short spin;
     std::string dets;
     std::string coeffs;
 };
@@ -348,6 +350,7 @@ void GenerateCSFS (
                             tcsf.count = 1;
                             tcsf.dets=std::to_string(i);
                             tcsf.coeffs="1.0000";
+                            tcsf.spin = spin;
                             found[i] = true;
                             for ( unsigned int j = i+1; j < n_dets; j++ )
                             {
@@ -380,6 +383,107 @@ void GenerateCSFS (
             }
         }
     }
+}
+
+std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        double lcoeff(0.0);
+        lnpos = lhs.dets.find('-',lopos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.dets.substr(lopos,lnpos-lopos);
+        ss >> lindex;
+        lncpos = lhs.dets.find('_',locpos+1);
+        ss.clear(); ss.str("");
+        ss << lhs.dets.substr(locpos,lncpos-locpos);
+        ss >> lcoeff;
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            double rcoeff(0.0);
+            rnpos = rhs.dets.find('-',ropos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.dets.substr(ropos,rnpos-ropos);
+            ss >> rindex;
+            rncpos = rhs.dets.find('_',rocpos+1);
+            ss.clear(); ss.str("");
+            ss << rhs.dets.substr(rocpos,rncpos-rocpos);
+            ss >> rcoeff;
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                if ( k == 0 ) 
+                {
+                    if ( dets[lindex][4] && dets[rindex][0] && (!dets[rindex][4]) ) 
+                    {
+                        itotal = itotal - 1.0;
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( dets[lindex][5] && dets[rindex][1] && (!dets[rindex][5]) ) 
+                    {
+                        itotal = itotal - 1.0;
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( dets[lindex][6] && dets[rindex][2] && (!dets[rindex][6]) ) 
+                    {
+                        itotal = itotal + std::pow(3,0.5);
+                    }
+                    if ( dets[lindex][8] && dets[rindex][2] && (!dets[rindex][8]) ) 
+                    {
+                        itotal = itotal + 1.0;
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( dets[lindex][7] && dets[rindex][3] && (!dets[rindex][7]) ) 
+                    {
+                        itotal = itotal + std::pow(3,0.5);
+                    }
+                    if ( dets[lindex][9] && dets[rindex][3] && (!dets[rindex][9]) ) 
+                    {
+                        itotal = itotal + 1.0;
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( dets[lindex][0] && dets[rindex][4] && (!dets[rindex][0]) ) 
+                    {
+                        itotal = itotal + 1.0;
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( dets[lindex][1] && dets[rindex][5] && (!dets[rindex][1]) ) 
+                    {
+                        itotal = itotal + 1.0;
+                    }
+                }
+                else if ( k == 6 )
+                {
+                    if ( dets[lindex][2] && dets[rindex][6] && (!dets[rindex][2]) ) 
+                    {
+                        itotal = itotal - std::pow(3,0.5);
+                    }
+                }
+                else if ( k == 7 )
+                {
+                    if ( dets[lindex][3] && dets[rindex][7] && (!dets[rindex][3]) ) 
+                    {
+                        itotal = itotal - std::pow(3,0.5);
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
 }
 
 int main ()
@@ -481,8 +585,9 @@ int main ()
             std::cout << ">  ";
             opos = npos+1;
         }
-        std::cout << "\n";
+        std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
     }
+    LX(csfs[0],csfs[1],dets);
 
     return 0;
 }
