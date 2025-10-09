@@ -15,6 +15,37 @@ struct CSFType
     std::string coeffs;
 };
 
+int GetIndex ( const CSFType & csf, const int & id )
+{
+    int index(0), opos(0), npos(0);
+    std::stringstream ss;
+    for ( unsigned int i = 0; i < id; i++ )
+    {
+        npos = csf.dets.find('-',opos+1);
+        opos=npos+1;
+    }
+    npos = csf.dets.find('-',opos+1);
+    ss << csf.dets.substr(opos,npos-opos);
+    ss >> index;
+    return index;
+}
+
+double GetCoeff ( const CSFType & csf, const int & id )
+{
+    int opos(0), npos(0);
+    double coeff;
+    std::stringstream ss;
+    for ( unsigned int i = 0; i < id; i++ )
+    {
+        npos = csf.coeffs.find('_',opos+1);
+        opos=npos+1;
+    }
+    npos = csf.coeffs.find('_',opos+1);
+    ss << csf.coeffs.substr(opos,npos-opos);
+    ss >> coeff;
+    return coeff;
+}
+
 //  t is true if +1/2, false if -1/2
 // sigma is true if +1/2, false if -1/2
 
@@ -234,16 +265,10 @@ void GenerateCoeffs (
     {
         tcsf.coeffs = "";
         double total;
-        int opos(0), npos(0);
         for ( unsigned int i = 0; i < tcsf.count; i++ )
         {
-            npos = tcsf.dets.find('-',opos+1);
-            std::string tindex_s = tcsf.dets.substr(opos,npos-opos);
-            opos=npos+1;
             int tindex;
-            std::stringstream ss;
-            ss << tindex_s;
-            ss >> tindex;
+            tindex = GetIndex(tcsf,i);
             bool t; bool sigma; short st2(0); short mt2(0); short cpl_index(0);
             total = 1.0;
             for ( unsigned int j = 0; j < 5; j++ )
@@ -266,7 +291,7 @@ void GenerateCoeffs (
                     }
                 }
             }
-            ss.clear(); ss.str("");
+            std::stringstream ss;
             std::string tot_str;
             ss << std::fixed << std::setprecision(4) << total;
             ss >> tot_str;
@@ -391,28 +416,16 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
     double rtotal(0.0), itotal(0.0);
     for ( unsigned int i = 0; i < lhs.count; i++ )
     {
-        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        int lindex(0);
         double lcoeff(0.0);
-        lnpos = lhs.dets.find('-',lopos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.dets.substr(lopos,lnpos-lopos);
-        ss >> lindex;
-        lncpos = lhs.coeffs.find('_',locpos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
-        ss >> lcoeff;
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
         for ( unsigned int j = 0; j < rhs.count; j++)
         {
-            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            int rindex(0);
             double rcoeff(0.0);
-            rnpos = rhs.dets.find('-',ropos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.dets.substr(ropos,rnpos-ropos);
-            ss >> rindex;
-            rncpos = rhs.coeffs.find('_',rocpos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
-            ss >> rcoeff;
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
             for ( unsigned int k = 0; k < 10; k++ )
             {
                 std::vector<bool> temp = dets[rindex];
@@ -587,28 +600,16 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
     double rtotal(0.0), itotal(0.0);
     for ( unsigned int i = 0; i < lhs.count; i++ )
     {
-        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        int lindex(0);
         double lcoeff(0.0);
-        lnpos = lhs.dets.find('-',lopos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.dets.substr(lopos,lnpos-lopos);
-        ss >> lindex;
-        lncpos = lhs.coeffs.find('_',locpos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
-        ss >> lcoeff;
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
         for ( unsigned int j = 0; j < rhs.count; j++)
         {
-            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            int rindex(0);
             double rcoeff(0.0);
-            rnpos = rhs.dets.find('-',ropos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.dets.substr(ropos,rnpos-ropos);
-            ss >> rindex;
-            rncpos = rhs.coeffs.find('_',rocpos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
-            ss >> rcoeff;
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
             for ( unsigned int k = 0; k < 10; k++ )
             {
                 std::vector<bool> temp = dets[rindex];
@@ -783,28 +784,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
     double rtotal(0.0), itotal(0.0);
     for ( unsigned int i = 0; i < lhs.count; i++ )
     {
-        int lindex(0), lopos(0), lnpos(0), locpos(0), lncpos(0);
+        int lindex(0);
         double lcoeff(0.0);
-        lnpos = lhs.dets.find('-',lopos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.dets.substr(lopos,lnpos-lopos);
-        ss >> lindex;
-        lncpos = lhs.coeffs.find('_',locpos+1);
-        ss.clear(); ss.str("");
-        ss << lhs.coeffs.substr(locpos,lncpos-locpos);
-        ss >> lcoeff;
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
         for ( unsigned int j = 0; j < rhs.count; j++)
         {
-            int rindex(0), ropos(0), rnpos(0), rocpos(0), rncpos(0);
+            int rindex(0);
             double rcoeff(0.0);
-            rnpos = rhs.dets.find('-',ropos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.dets.substr(ropos,rnpos-ropos);
-            ss >> rindex;
-            rncpos = rhs.coeffs.find('_',rocpos+1);
-            ss.clear(); ss.str("");
-            ss << rhs.coeffs.substr(rocpos,rncpos-rocpos);
-            ss >> rcoeff;
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
             for ( unsigned int k = 0; k < 10; k++ )
             {
                 std::vector<bool> temp = dets[rindex];
@@ -906,7 +895,7 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                         }
                     }
                 }
-                else
+                else if ( k == 9 )
                 {
                     if ( temp[9] )
                     {
@@ -988,16 +977,11 @@ int main ()
     for ( unsigned int i = 0; i < total_csf_count; i++ )
     {
         std::cout << "CSF " << std::setw(4) << i+1 << ": ";
-        int opos(0), npos(0), copos(0), cnpos(0), dindex;
+        int dindex;
         for ( unsigned int j = 0; j < csfs[i].count; j++ )
         {
-            std::stringstream ss;
-            cnpos = csfs[i].coeffs.find('_',copos+1);
-            std::cout << csfs[i].coeffs.substr(copos,cnpos-copos) << " |";
-            copos = cnpos+1;
-            npos = csfs[i].dets.find('-',opos+1);
-            ss << csfs[i].dets.substr(opos,npos-opos);
-            ss >> dindex;
+            std::cout << std::fixed << std::setprecision(4) << GetCoeff(csfs[i],j) << " |";
+            dindex = GetIndex(csfs[i],j);
             std::cout << "xz(";
             if ( dets[dindex][0] && dets[dindex][1] ) std::cout << "2)";
             else if ( dets[dindex][0] ) std::cout << "a)";
@@ -1024,29 +1008,195 @@ int main ()
             else if ( dets[dindex][9] ) std::cout << "b)";
             else std::cout << "0)";
             std::cout << ">  ";
-            opos = npos+1;
         }
         std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
+    }
+
+    std::vector<bool> gs_det_hs(10,false);
+    std::vector<short> gs_config(5,0);
+    std::vector<CSFType> gs_csfs(s+1);
+    std::vector<int> gs_csf_indices(s+1);
+    int gs_index(0);
+
+    for ( auto j : orbs )
+    {
+        gs_det_hs[j] = true;
+    }
+    for ( unsigned int j = 0; j < 5; j++ )
+    {
+        if ( gs_det_hs[2*j] && gs_det_hs[2*j+1] ) gs_config[j]=2;
+        else if ( gs_det_hs[2*j] || gs_det_hs[2*j+1] ) gs_config[j]=1;
+        else gs_config[j]=0;
     }
 
     for ( unsigned int i = 0; i < total_csf_count; i++ )
     {
         if ( csfs[i].spin == s )
         {
-            std::vector<bool> tdet(10,false);
-            std::vector<short> tconfig(5,0);
-            for ( auto j : orbs )
+            int tindex = GetIndex(csfs[i],0);
+            if ( configs[tindex] == gs_config )
             {
-                tdet[j] = true;
+                gs_csfs[gs_index] = csfs[i];
+                gs_csf_indices[gs_index] = i;
+                gs_index++;
             }
         }
     }
 
-    std::cout << "\n\nThe Ground State CSFs are ";
+    std::cout << "\nThe Ground State CSFs are ";
+    for ( unsigned int i = 0; i < gs_csf_indices.size(); i++ )
+    {
+        std::cout << gs_csf_indices[i]+1 << " ";
+    }
+    std::cout << "\n";
 
-    std::cout << "\n\nNow evaluating the G-Tensor:\n\n";
-    std::cout << "GXX:\n";
+    std::cout << "\n\nNow evaluating the G-Tensor. For the G-Tensor, we only need to";
+    std::cout << " evaluate a single Ms state, so we'll choose Ms=S:\n\n";
+    std::cout << "GXX: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result = std::imag(LX(gs_csfs[0],csfs[i],dets));
+        if ( result > 0.01 || result < -0.01 )
+        {
+            std::cout << std::fixed << std::setprecision(4) << result*result;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\nGXY: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
     
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LX(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LY(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
 
+    std::cout << "\nGXZ: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+    
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LX(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\nGYX: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+    
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LY(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LX(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "GYY: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result = std::imag(LY(gs_csfs[0],csfs[i],dets));
+        if ( result > 0.01 || result < -0.01 )
+        {
+            std::cout << std::fixed << std::setprecision(4) << result*result;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\nGYZ: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+    
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LY(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\nGZX: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+    
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LX(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\nGZY: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+    
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result1 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
+        double result2 = std::imag(LY(gs_csfs[0],csfs[i],dets));
+        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        {
+            std::cout << std::fixed << std::setprecision(4) << result1*result2;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "GZZ: ";
+    if ( nel <= 5 ) std::cout << "-";
+    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        double result = std::imag(LZ(gs_csfs[0],csfs[i],dets));
+        if ( result > 0.01 || result < -0.01 )
+        {
+            std::cout << std::fixed << std::setprecision(4) << result*result;
+            std::cout << " E(|" << i+1 << ">)^(-1)\n";
+        }        
+    }
+
+    std::cout << "\n\nNow let's build the Model Interaction Matrix for S=";
+    std::cout << std::fixed << std::setprecision(1) << double(s/2.0) << ":\n\n";
+
+    for ( int ms1 = s; ms1 >= -s; ms1-=2 )
+    {
+        for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+        {
+            std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
+            std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
+            std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
+            std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
+            std::cout << ">:\n";
+        }
+    }
     return 0;
 }
