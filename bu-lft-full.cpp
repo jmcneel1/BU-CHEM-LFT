@@ -15,6 +15,27 @@ struct CSFType
     std::string coeffs;
 };
 
+std::string HModel (short s, short ms1, short ms2 )
+{
+    std::string result = "";
+    if ( s == 2 )
+    {
+        if ( ms1 == 2 )
+        {
+            if ( ms2 == 2 ) result = "0.5(Dxx+Dyy)+Dzz";
+            else if ( ms2 == 0) result = "0.707(Dxz+iDyz)";
+            else result = "0.5(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == 0 )
+        {
+            if ( ms2 == 2 ) result = "0.707(Dxz-iDyz)";
+            else if ( ms2 == 0 ) result = "Dxx+Dyy";
+            else result = "-0.707(Dxz+iDyz)";
+        }
+    }
+    return result;
+}
+
 int GetIndex ( const CSFType & csf, const int & id )
 {
     int index(0), opos(0), npos(0);
@@ -1184,18 +1205,22 @@ int main ()
         }        
     }
 
-    std::cout << "\n\nNow let's build the Model Interaction Matrix for S=";
-    std::cout << std::fixed << std::setprecision(1) << double(s/2.0) << ":\n\n";
-
-    for ( int ms1 = s; ms1 >= -s; ms1-=2 )
+    if ( s > 1 )
     {
-        for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+        std::cout << "\n\nNow let's build the Model Interaction Matrix for S=";
+        std::cout << std::fixed << std::setprecision(1) << double(s/2.0) << ":\n\n";
+
+        for ( int ms1 = s; ms1 >= -s; ms1-=2 )
         {
-            std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
-            std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
-            std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
-            std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
-            std::cout << ">:\n";
+            for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+            {
+                std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
+                std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
+                std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
+                std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
+                std::cout << ">:\n";
+                std::cout << HModel(s,ms1,ms2) << "\n\n";
+            }
         }
     }
     return 0;
