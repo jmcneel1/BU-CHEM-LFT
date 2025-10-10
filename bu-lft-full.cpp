@@ -32,6 +32,139 @@ std::string HModel (short s, short ms1, short ms2 )
             else if ( ms2 == 0 ) result = "Dxx+Dyy";
             else result = "-0.707(Dxz+iDyz)";
         }
+        else
+        {
+            if ( ms2 == 2 ) result = "0.5(Dxx-Dyy-iDxy)";
+            else if ( ms2 == 0 ) result = "-0.707(Dxz-iDyz)";
+            else result = "-0.5(Dxx+Dyy)+Dzz";
+        }
+    }
+    else if ( s == 3 )
+    {
+        if ( ms1 == 3 )
+        {
+            if ( ms2 == 3 ) result = "0.75(Dxx+Dyy+3Dzz)";
+            else if ( ms2 == 1) result = "1.732(Dxz+iDyz)";
+            else if ( ms2 == -1 ) result = "0.866(Dxx-Dyy+2iDxy)";
+            else result = "0";
+        }
+        else if ( ms1 == 1 )
+        {
+            if ( ms2 == 3 ) result = "1.732(Dxz-iDyz)";
+            else if ( ms2 == 1 ) result = "0.25(7Dxx+7Dyy+Dzz)";
+            else if ( ms2 == -1 ) result = "0";
+            else result = "0.866(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == -1 )
+        {
+            if ( ms2 == 3 ) result = "0.866(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = "0.25(7Dxx+7Dyy+Dzz)";
+            else result = "-1.732(Dxz+iDyz)";
+        }
+        else
+        {
+            if ( ms2 == 3 ) result = "0";
+            else if ( ms2 == 1 ) result = "0.866(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -1 ) result = "-1.732(Dxz-iDyz)";
+            else result = "0.75(Dxx+Dyy+3Dzz)";
+        }
+    }
+    else if ( s == 4 )
+    {
+        if ( ms1 == 4 )
+        {
+            if ( ms2 == 4 ) result = "Dxx+Dyy+4Dzz";
+            else if ( ms2 == 2) result = "3(Dxz+iDyz)";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -2 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 2 )
+        {
+            if ( ms2 == 4 ) result = "3(Dxz-iDyz)";
+            else if ( ms2 == 2) result = "0.5(5Dxx+5Dyy+2Dzz)";
+            else if ( ms2 == 0 ) result = "1.225(Dxz+iDyz)";
+            else if ( ms2 == -2 ) result = "1.5(Dxx-Dyy+2iDxy)";
+            else result = "0";
+        }
+        else if ( ms1 == 0 )
+        {
+            if ( ms2 == 4 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 2) result = "1.225(Dxz-iDyz)";
+            else if ( ms2 == 0 ) result = "3(Dxx+Dyy)";
+            else if ( ms2 == -2 ) result = "-1.225(Dxz-iDyz)";
+            else result = "1.225(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == -2 )
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "1.5(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 0 ) result = "-1.225(Dxz-Dyz)";
+            else if ( ms2 == -2 ) result = "0.5(5Dxx+5Dyy+2Dzz)";
+            else result = "-3(Dxz+iDyz)";
+        }
+        else
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "0";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
+            else result = "Dxx+Dyy+4Dzz";
+        }
+    }
+    else
+    {
+        if ( ms1 == 5 )
+        {
+            if ( ms2 == 5 ) result = "1.25(Dxx+Dyy+5Dzz)";
+            else if ( ms2 == 3) result = "4.472(Dxz+iDyz)";
+            else if ( ms2 == 1 ) result = "1.581(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -1 ) result = "0";
+            else if ( ms2 == -3 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 3 )
+        {
+            if ( ms2 == 5 ) result = "4.472(Dxz-iDyz)";
+            else if ( ms2 == 3) result = "0.25(13Dxx+13Dyy+9Dzz)";
+            else if ( ms2 == 1 ) result = "2.828(Dxz+iDyz)";
+            else if ( ms2 == -1 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -3 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 1 )
+        {
+            if ( ms2 == 4 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 2) result = "1.225(Dxz-iDyz)";
+            else if ( ms2 == 0 ) result = "3(Dxx+Dyy)";
+            else if ( ms2 == -2 ) result = "-1.225(Dxz-iDyz)";
+            else result = "1.225(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == -1 )
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "1.5(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 0 ) result = "-1.225(Dxz-Dyz)";
+            else if ( ms2 == -2 ) result = "0.5(5Dxx+5Dyy+2Dzz)";
+            else result = "-3(Dxz+iDyz)";
+        }
+        else if ( ms1 == -3 )
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "0";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
+            else result = "Dxx+Dyy+4Dzz";
+        }
+        else
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "0";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
+            else result = "Dxx+Dyy+4Dzz";
+        }
     }
     return result;
 }
