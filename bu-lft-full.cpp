@@ -135,35 +135,39 @@ std::string HModel (short s, short ms1, short ms2 )
         }
         else if ( ms1 == 1 )
         {
-            if ( ms2 == 4 ) result = "1.225(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == 2) result = "1.225(Dxz-iDyz)";
-            else if ( ms2 == 0 ) result = "3(Dxx+Dyy)";
-            else if ( ms2 == -2 ) result = "-1.225(Dxz-iDyz)";
-            else result = "1.225(Dxx-Dyy+2iDxy)";
+            if ( ms2 == 5 ) result = "1.581(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 3) result = "2.828(Dxz-iDyz)";
+            else if ( ms2 == 1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
+            else if ( ms2 == -1 ) result = "0";
+            else if ( ms2 == -3 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            else result = "0";
         }
         else if ( ms1 == -1 )
         {
-            if ( ms2 == 4 ) result = "0";
-            else if ( ms2 == 2) result = "1.5(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == 0 ) result = "-1.225(Dxz-Dyz)";
-            else if ( ms2 == -2 ) result = "0.5(5Dxx+5Dyy+2Dzz)";
-            else result = "-3(Dxz+iDyz)";
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
+            else if ( ms2 == -3 ) result = "-2.828(Dxz+iDyz)";
+            else result = "1.581(Dxx-Dyy+2iDxy)";
         }
         else if ( ms1 == -3 )
         {
-            if ( ms2 == 4 ) result = "0";
-            else if ( ms2 == 2) result = "0";
-            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
-            else result = "Dxx+Dyy+4Dzz";
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "0";
+            else if ( ms2 == 1 ) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -1 ) result = "-2.828(Dxz-iDyz)";
+            else if ( ms2 == -3 ) result = "0.25(13Dxx+13Dyy+9Dzz)";
+            else result = "-4.472(Dxz+iDyz)";
         }
         else
         {
-            if ( ms2 == 4 ) result = "0";
-            else if ( ms2 == 2) result = "0";
-            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
-            else result = "Dxx+Dyy+4Dzz";
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "0";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = "1.581(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -3 ) result = "-4.472(Dxz-iDyz)";
+            else result = "1.25(Dxx+Dyy+5Dzz)";
         }
     }
     return result;
@@ -629,7 +633,7 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[8] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -652,7 +656,7 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[9] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -722,7 +726,7 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[2] = true; temp[8] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
                             }
                         }
                     }
@@ -736,7 +740,191 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[3] = true; temp[9] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
+}
+
+std::complex<double> LXSX ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0);
+        double lcoeff(0.0);
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0);
+            double rcoeff(0.0);
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                std::vector<bool> temp = dets[rindex];
+                if ( k == 0 ) 
+                {
+                    if ( temp[0] )
+                    {
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( temp[1] )
+                    {
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( temp[2] )
+                    {
+                        if ( !temp[7] )
+                        {
+                            temp[7] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                            temp[7] = false; temp[2] = true;
+                        }
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( temp[3] )
+                    {
+                        if ( !temp[6] )
+                        {
+                            temp[6] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                            temp[6] = false; temp[3] = true;
+                        }
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( temp[4] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( temp[5] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 6 )
+                {
+                    if ( temp[6] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[6] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                        }
+                    }
+                }
+                else if ( k == 7 )
+                {
+                    if ( temp[7] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[7] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -776,7 +964,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[6] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
                             }
                             temp[0] = true; temp[6] = false;
                         }
@@ -799,7 +987,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[7] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
+                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
                             }
                             temp[1] = true; temp[7] = false;
                         }
@@ -822,7 +1010,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[4] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -836,7 +1024,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[5] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -850,7 +1038,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[2] = true; temp[4] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
                             }
                         }
                     }
@@ -864,7 +1052,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[3] = true; temp[5] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
                             }
                         }
                     }
@@ -878,7 +1066,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[0] = true; temp[6] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
                             }
                         }
                     }
@@ -892,7 +1080,7 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[1] = true; temp[7] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff * std::pow(3.0,0.5);
+                                itotal = itotal - lcoeff * rcoeff * std::pow(3.0,0.5);
                             }
                         }
                     }
@@ -932,6 +1120,190 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
     return total;
 }
 
+std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0);
+        double lcoeff(0.0);
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0);
+            double rcoeff(0.0);
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                std::vector<bool> temp = dets[rindex];
+                if ( k == 0 ) 
+                {
+                    if ( temp[0] )
+                    {
+                        if ( !temp[7] )
+                        {
+                            temp[7] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                            temp[0] = true; temp[7] = false;
+                        }
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( temp[1] )
+                    {
+                        if ( !temp[6] )
+                        {
+                            temp[6] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                            temp[1] = true; temp[6] = false;
+                        }
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( temp[2] )
+                    {
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( temp[3] )
+                    {
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( temp[4] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( temp[5] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 6 )
+                {
+                    if ( temp[6] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[6] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                        }
+                    }
+                }
+                else if ( k == 7 )
+                {
+                    if ( temp[7] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[7] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
+}
+
 std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
 {
     std::stringstream ss;
@@ -960,7 +1332,7 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[2] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -974,7 +1346,7 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[3] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - lcoeff * rcoeff;
                             }
                         }
                     }
@@ -988,7 +1360,7 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[0] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1002,7 +1374,7 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                             temp[1] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1068,6 +1440,221 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
     }
     std::complex<double> total(rtotal,itotal);
     return total;
+}
+
+std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+{
+    std::stringstream ss;
+    double rtotal(0.0), itotal(0.0);
+    for ( unsigned int i = 0; i < lhs.count; i++ )
+    {
+        int lindex(0);
+        double lcoeff(0.0);
+        lindex = GetIndex(lhs,i);
+        lcoeff = GetCoeff(lhs,i);
+        for ( unsigned int j = 0; j < rhs.count; j++)
+        {
+            int rindex(0);
+            double rcoeff(0.0);
+            rindex = GetIndex(rhs,j);
+            rcoeff = GetCoeff(rhs,j);
+            for ( unsigned int k = 0; k < 10; k++ )
+            {
+                std::vector<bool> temp = dets[rindex];
+                if ( k == 0 ) 
+                {
+                    if ( temp[0] )
+                    {
+                        if ( !temp[2] )
+                        {
+                            temp[2] = true; temp[0] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 1 )
+                {
+                    if ( temp[1] )
+                    {
+                        if ( !temp[3] )
+                        {
+                            temp[3] = true; temp[1] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 2 )
+                {
+                    if ( temp[2] )
+                    {
+                        if ( !temp[0] )
+                        {
+                            temp[0] = true; temp[2] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 3 )
+                {
+                    if ( temp[3] )
+                    {
+                        if ( !temp[1] )
+                        {
+                            temp[1] = true; temp[3] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                            }
+                        }
+                    }
+                }
+                else if ( k == 4 )
+                {
+                    if ( temp[4] )
+                    {
+                        if ( !temp[8] )
+                        {
+                            temp[8] = true; temp[4] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 5 )
+                {
+                    if ( temp[5] )
+                    {
+                        if ( !temp[9] )
+                        {
+                            temp[9] = true; temp[5] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 8 )
+                {
+                    if ( temp[8] )
+                    {
+                        if ( !temp[4] )
+                        {
+                            temp[4] = true; temp[8] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal + lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+                else if ( k == 9 )
+                {
+                    if ( temp[9] )
+                    {
+                        if ( !temp[5] )
+                        {
+                            temp[5] = true; temp[9] = false;
+                            if ( dets[lindex] == temp )
+                            {
+                                itotal = itotal - lcoeff * rcoeff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    std::complex<double> total(rtotal,itotal);
+    return total;
+}
+
+std::string HInt (short s, short ms1, short ms2,
+                    const std::vector<CSFType> & gs_csfs,
+                    const std::vector<CSFType> & csfs,
+                    const std::vector<std::vector<bool>> & dets )
+{
+    std::string result = "";
+    short gs_index1 = (s-ms1)/2;
+    short gs_index2 = (s-ms2)/2;
+    for ( unsigned int i = 0; i < csfs.size(); i++ )
+    {
+        std::complex<double> temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+        std::complex<double> temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
+        {
+            result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::real(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
+             (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
+        {
+            result += std::to_string(std::real(temp2)*std::real(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::real(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
+        {
+            result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+        temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
+        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
+             (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
+        {
+            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+        }
+    }
+    return result;
 }
 
 int main ()
@@ -1349,12 +1936,28 @@ int main ()
             {
                 std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
-                std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
+                std::cout << "|H(mod)|" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
                 std::cout << ">:\n";
                 std::cout << HModel(s,ms1,ms2) << "\n\n";
             }
         }
+
+        std::cout << "Now let's build the General Interaction Matrix:\n\n";
+
+        for ( int ms1 = s; ms1 >= -s; ms1-=2 )
+        {
+            for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+            {
+                std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
+                std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
+                std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
+                std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0) << "> ";
+                std::cout << std::fixed << std::setprecision(3) << 4.0/double(s*s) << " ζ^2 *\n";
+                std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets) << "\n\n";
+            }
+        }
+
     }
     return 0;
 }
