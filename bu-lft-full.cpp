@@ -1373,52 +1373,66 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[7] )
                         {
-                            // SY xz(a) -> xz(b) ... -0.5I
+                            // SY xz(a) -> xz(b) ... +0.5I
                             // LY xz(b) -> z2(b) ... -SQ(3)I
                             short permute(1);
-                            for ( unsigned int l = 7; l > 0; l-- ) 
+                            for ( unsigned int l = 1; l < 7; l++ ) 
                             {
                                 if ( temp[l] ) permute*=-1;
                             }
                             temp[7] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
                             }
                             temp[0] = true; temp[7] = false;
                         }
                         if ( !temp[9] )
                         {
-                            // SY xz(a) -> xz(b) ... -0.5I
+                            // SY xz(a) -> xz(b) ... +0.5I
                             // LY xz(b) -> x2y2(b) ... +I
                             short permute(1);
-                            for ( unsigned int l = 7; l > 0; l-- ) 
+                            for ( unsigned int l = 1; l < 9; l++ ) 
                             {
                                 if ( temp[l] ) permute*=-1;
                             }
                             temp[9] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
-                } // FINISH HERE
+                } 
                 else if ( k == 1 )
                 {
                     if ( temp[1] )
                     {
                         if ( !temp[6] )
                         {
+                            // SY xz(b) -> xz(a) ... -0.5I
+                            // LY xz(a) -> z2(a) ... -SQ(3)I
+                            short permute(1);
+                            for ( unsigned int l = 2; l < 6; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[6] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                                rtotal = rtotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
                             }
                             temp[1] = true; temp[6] = false;
                         }
                         if ( !temp[8] )
                         {
+                            // SY xz(b) -> xz(a) ... -0.5I
+                            // LY xz(a) -> x2y2(a) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 2; l < 6; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[8] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
@@ -1433,10 +1447,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[5] )
                         {
+                            // SY yz(a) -> yz(b) ... +0.5I
+                            // LY yz(b) -> xy(b) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 3; l < 5; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[5] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1447,10 +1468,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[4] )
                         {
+                            // SY yz(b) -> yz(a) ... -0.5I
+                            // LY yz(a) -> xy(a) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 4; l < 4; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[4] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1461,10 +1489,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[3] )
                         {
+                            // SY xy(a) -> xy(b) ... +0.5I
+                            // LY xy(b) -> yz(b) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 3; l > 3; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[3] = true; temp[4] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1475,10 +1510,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[2] )
                         {
+                            // SY xy(b) -> xy(a) ... -0.5I
+                            // LY xy(a) -> yz(a) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 4; l > 2; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[2] = true; temp[5] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1489,10 +1531,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[1] )
                         {
+                            // SY z2(a) -> z2(b) ... +0.5I
+                            // LY z2(b) -> xz(b) ... +SQ(3)I
+                            short permute(1);
+                            for ( unsigned int l = 5; l > 1; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[1] = true; temp[6] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
                             }
                         }
                     }
@@ -1503,10 +1552,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[0] )
                         {
+                            // SY z2(b) -> z2(a) ... -0.5I
+                            // LY z2(a) -> xz(a) ... +SQ(3)I
+                            short permute(1);
+                            for ( unsigned int l = 6; l > 0; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[0] = true; temp[7] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal - 0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
+                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff * std::pow(3.0,0.5));
                             }
                         }
                     }
@@ -1517,10 +1573,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[1] )
                         {
+                            // SY x2y2(a) -> x2y2(b) ... +0.5I
+                            // LY x2y2(b) -> xz(b) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 7; l > 1; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[1] = true; temp[8] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal + 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal + permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1531,10 +1594,17 @@ std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[0] )
                         {
+                            // SY x2y2(b) -> x2y2(a) ... -0.5I
+                            // LY x2y2(a) -> xz(a) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 8; l > 0; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[0] = true; temp[9] = false;
                             if ( dets[lindex] == temp )
                             {
-                                rtotal = rtotal - 0.5*(lcoeff * rcoeff);
+                                rtotal = rtotal - permute*0.5*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1571,10 +1641,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[2] )
                         {
+                            // Lz xz(a) -> yz(a) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 1; l < 2; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[2] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + permute*lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1585,10 +1661,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[3] )
                         {
+                            // Lz xz(b) -> yz(b) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 2; l < 3; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[3] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal + permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1599,10 +1681,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[0] )
                         {
+                            // Lz yz(a) -> xz(a) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 1; l > 0; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[0] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1613,10 +1701,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[1] )
                         {
+                            // Lz yz(b) -> xz(b) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 2; l > 1; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[1] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal - permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1627,10 +1721,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[8] )
                         {
+                            // Lz xy(a) -> x2y2(a) ... -2I
+                            short permute(1);
+                            for ( unsigned int l = 5; l < 8; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[8] = true; temp[4] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - 2 * lcoeff * rcoeff;
+                                itotal = itotal - 2 * permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1641,10 +1741,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[9] )
                         {
+                            // Lz xy(b) -> x2y2(b) ... -2I
+                            short permute(1);
+                            for ( unsigned int l = 6; l < 9; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[9] = true; temp[5] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - 2 * lcoeff * rcoeff;
+                                itotal = itotal - 2 * permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1655,10 +1761,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[4] )
                         {
+                            // Lz x2y2(a) -> xy(a) ... +2I
+                            short permute(1);
+                            for ( unsigned int l = 7; l > 4; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[4] = true; temp[8] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + 2 * lcoeff * rcoeff;
+                                itotal = itotal + 2 * permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1669,10 +1781,16 @@ std::complex<double> LZ ( const CSFType & lhs, const CSFType & rhs, const std::v
                     {
                         if ( !temp[5] )
                         {
+                            // Lz x2y2(b) -> xy(b) ... +2I
+                            short permute(1);
+                            for ( unsigned int l = 8; l > 5; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[5] = true; temp[9] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + 2 * lcoeff * rcoeff;
+                                itotal = itotal + 2 * permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1709,10 +1827,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[2] )
                         {
+                            // Sz xz(a) ... 0.5
+                            // Lz xz(a) -> yz(a) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 1; l < 2; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[2] = true; temp[0] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                                itotal = itotal + 0.5*permute*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1723,10 +1848,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[3] )
                         {
+                            // Sz xz(b) ... -0.5
+                            // Lz xz(b) -> yz(b) ... +I
+                            short permute(1);
+                            for ( unsigned int l = 2; l < 3; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[3] = true; temp[1] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                                itotal = itotal - 0.5*permute*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1737,10 +1869,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[0] )
                         {
+                            // Sz yz(a) ... +0.5
+                            // Lz yz(a) -> xz(a) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 1; l > 0; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[0] = true; temp[2] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - 0.5*(lcoeff * rcoeff);
+                                itotal = itotal - 0.5*permute*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1751,10 +1890,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[1] )
                         {
+                            // Sz yz(b) ... -0.5
+                            // Lz yz(b) -> xz(b) ... -I
+                            short permute(1);
+                            for ( unsigned int l = 2; l > 1; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[1] = true; temp[3] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + 0.5*(lcoeff * rcoeff);
+                                itotal = itotal + 0.5*permute*(lcoeff * rcoeff);
                             }
                         }
                     }
@@ -1765,10 +1911,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[8] )
                         {
+                            // Sz xy(a) ... +0.5
+                            // Lz xy(a) -> x2y2(a) ... -2I
+                            short permute(1);
+                            for ( unsigned int l = 5; l < 8; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[8] = true; temp[4] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal - permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1779,10 +1932,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[9] )
                         {
+                            // Sz xy(b) ... -0.5
+                            // Lz xy(b) -> x2y2(b) ... -2I
+                            short permute(1);
+                            for ( unsigned int l = 6; l < 9; l++ ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[9] = true; temp[5] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal + permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1793,10 +1953,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[4] )
                         {
+                            // Sz x2y2(a) ... +0.5
+                            // Lz x2y2(a) -> xy(a) ... +2I
+                            short permute(1);
+                            for ( unsigned int l = 7; l > 4; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[4] = true; temp[8] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal + lcoeff * rcoeff;
+                                itotal = itotal + permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -1807,10 +1974,17 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
                     {
                         if ( !temp[5] )
                         {
+                            // Sz x2y2(b) ... -0.5
+                            // Lz x2y2(b) -> xy(b) ... +2I
+                            short permute(1);
+                            for ( unsigned int l = 8; l > 5; l-- ) 
+                            {
+                                if ( temp[l] ) permute*=-1;
+                            }
                             temp[5] = true; temp[9] = false;
                             if ( dets[lindex] == temp )
                             {
-                                itotal = itotal - lcoeff * rcoeff;
+                                itotal = itotal - permute * lcoeff * rcoeff;
                             }
                         }
                     }
@@ -2195,7 +2369,7 @@ int main ()
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
                 std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0) << "> ";
-                std::cout << std::fixed << std::setprecision(3) << 4.0/double(s*s) << " ζ^2 *\n";
+                std::cout << std::fixed << std::setprecision(3) << -4.0/double(s*s) << " ζ^2 *\n";
                 std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets) << "\n\n";
             }
         }
