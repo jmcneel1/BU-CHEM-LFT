@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <vector>
 #include <cmath>
@@ -2011,13 +2012,21 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
-            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+            // <temp2|i> <i|temp1>
+            // LXSX is always imaginary, so that
+            // I*I = -1, and the complex conjugate is -1 * the rhs
+            // So that no sign correction
+
+            result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
         {
+            // <temp2|i> <i|temp1>
+            // LXSX is always imaginary, so that we need no sign correction
+
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
@@ -2025,14 +2034,22 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
-            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+            // <temp2|i> <i|temp1>
+            // LXSX and LZSZ are always imaginary, so that
+            // I*I = -1, and the complex conjugate is -1 * the rhs
+            // So that no sign correction
+
+            result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
-            result += std::to_string(-std::imag(temp2)*std::real(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+            // <temp2|i> <i|temp1>
+            // LXSX is always imaginary, so that we need a sign correction
+
+            result += std::to_string(-std::imag(temp2)*std::real(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
@@ -2046,6 +2063,9 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
+            // <temp2|i> <i|temp1>
+            // LZSZ is always imaginary, so that we need a sign correction
+
             result += std::to_string(-std::imag(temp2)*std::real(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
@@ -2053,13 +2073,22 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
-            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+
+            // <temp2|i> <i|temp1>
+            // LZSZ is always imaginary, so that
+            // I*I = -1, and the complex conjugate is -1 * the rhs
+            // So that no sign correction
+
+            result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
         {
+            // <temp2|i> <i|temp1>
+            // LZSZ is always imaginary, so that we need no sign correction
+
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
@@ -2067,7 +2096,13 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
-            result += std::to_string(-std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
+
+            // <temp2|i> <i|temp1>
+            // LXSX and LZSZ are always imaginary, so that
+            // I*I = -1, and the complex conjugate is -1 * the rhs
+            // So that no sign correction
+
+            result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
     }
     return result;
@@ -2097,6 +2132,35 @@ int main ()
         if ( orbs[i] % 2 == 0 ) s++;
         else s--;
     }
+
+    std::ofstream ofile;
+    ofile.open("output.tex");
+    ofile << "\\documentclass[11pt]{article}\n";
+    ofile << "\\usepackage[utf8]{inputenc}\n";
+    ofile << "\\usepackage{geometry}\n";
+    ofile << "\\usepackage{graphicx}";
+    ofile << "\\usepackage{booktabs}\n";
+    ofile << "\\usepackage{array}\n";
+    ofile << "\\usepackage{paralist}\n";
+    ofile << "\\usepackage{verbatim}\n";
+    ofile << "\\usepackage{subfig}\n";
+    ofile << "\\usepackage{amssymb}\n";
+    ofile << "\\usepackage{amsmath}\n";
+    ofile << "\\usepackage{fancyhdr}\n";
+    ofile << "\\pagestyle{fancy}";
+    ofile << "\\renewcommand{\\headrulewidth}{0pt}\n";
+    ofile << "\\lhead{}\\chead{}\\rhead{}\n";
+    ofile << "\\lfoot{}\\cfoot{\\thepage}\\rfoot{}\n";
+    ofile << "\\usepackage{sectsty}\n";
+    ofile << "\\allsectionsfont{\\sffamily\\mdseries\\upshape}\n";
+    ofile << "\\usepackage[nottoc,notlof,notlot]{tocbibind}\n";
+    ofile << "\\usepackage[titles,subfigure]{tocloft}\n";
+    ofile << "\\renewcommand{\\cftsecfont}{\\rmfamily\\mdseries\\upshape}\n";
+    ofile << "\\renewcommand{\\cftsecpagefont}{\\rmfamily\\mdseries\\upshape}\n";
+    ofile << "\\title{$3d^{" << std::to_string(nel) << "}$}\n";
+    ofile << "\\begin{document}\n";
+    ofile << "\\maketitle\n";
+
 
     std::cout << "S: ";
     std::cout << std::fixed << std::setprecision(1) << float (s/2.) << "\n\n";
@@ -2185,6 +2249,42 @@ int main ()
         else if ( gs_det_hs[2*j] || gs_det_hs[2*j+1] ) gs_config[j]=1;
         else gs_config[j]=0;
     }
+
+    std::vector<std::string> labels = {"xz","yz","xy","z^2","x^2-y^2"};
+    std::vector<short> order;
+
+    ofile << "\\section{$\\left|";
+    for ( unsigned int i = 0; i < 5; i++ )
+    {
+        if ( gs_config[i] == 2 )
+        {
+            ofile << "3d_{" << labels[i] << "}^{2}";
+            order.push_back(i);
+        }
+    }
+    for ( unsigned int i = 0; i < 5; i++ )
+    {
+        if ( gs_config[i] == 1 )
+        {
+            ofile << "3d_{" << labels[i] << "}^{\\alpha}";
+            order.push_back(i);
+        }
+    }
+    for ( unsigned int i = 0; i < 5; i++ )
+    {
+        if ( gs_config[i] == 0 )
+        {
+            ofile << "3d_{" << labels[i] << "}^{0}";
+            order.push_back(i);
+        }
+    }
+
+    std::string s_string = (s % 2 == 0) ? std::to_string(s/2) : std::to_string(s)+"/2";
+    ofile << "\\right\\rangle$}\n\n";
+
+    ofile << "Here are the CSFs:\\newline\\newline \n\n";
+    
+    ofile << "$\\left|0," <<  s_string << "\\right\\rangle$\n";
 
     for ( unsigned int i = 0; i < total_csf_count; i++ )
     {
@@ -2375,5 +2475,9 @@ int main ()
         }
 
     }
+
+    ofile << "\\end{document}\n";
+    ofile.close();
+
     return 0;
 }
