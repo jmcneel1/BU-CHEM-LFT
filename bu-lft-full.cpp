@@ -227,6 +227,26 @@ double Clebsch ( bool t, bool sigma, short st2, short mt2 )
 
 }
 
+std::string Coeff_To_Tex ( const double & coeff )
+{
+    std::stringstream ss;
+    std::string tstring, sign("");
+    double tcoeff = coeff;
+    if ( tcoeff < 0 ) 
+    {
+        tcoeff*=-1; sign = "-";
+    }
+    ss << std::fixed << std::setprecision(4) << tcoeff;
+    ss >> tstring;
+    if ( tstring == "1.0000" ) return sign;
+    else if ( tstring == "0.7071" ) return sign+"\\frac{1}{\\sqrt{2}}";
+    else if ( tstring == "0.4082" ) return sign+"\\frac{1}{\\sqrt{6}}";
+    else if ( tstring == "0.8165" ) return sign+"\\\\sqrt{\\frac{2}{3}}";
+    else if ( tstring == "0.5774" ) return sign+"\\frac{1}{\\sqrt{3}}";
+    else if ( tstring == "0.5000" ) return sign+"\\frac{1}{2}";
+    return "";
+}
+
 int Factorial ( const int & num )
 {
     if ( num > 0 ) return num * Factorial(num-1);
@@ -247,7 +267,7 @@ int NumCSF ( short st2, short nel )
     k1 = 5 + std::floor(k1content);
     k2 = std::floor(k2content);
     result = (st2+1.0)/6.0*Binomial(6,k1)*Binomial(6,k2);
-    return std::floor(result);
+    return std::round(result);
 }
 
 void GenerateDeterminants ( std::vector< std::vector <bool> > & dets,
@@ -2133,6 +2153,23 @@ int main ()
         else s--;
     }
 
+    std::vector<bool> gs_det_hs(10,false);
+    std::vector<short> gs_config(5,0);
+    std::vector<CSFType> gs_csfs(s+1);
+    std::vector<int> gs_csf_indices(s+1);
+    int gs_index(0);
+
+    for ( auto j : orbs )
+    {
+        gs_det_hs[j] = true;
+    }
+    for ( unsigned int j = 0; j < 5; j++ )
+    {
+        if ( gs_det_hs[2*j] && gs_det_hs[2*j+1] ) gs_config[j]=2;
+        else if ( gs_det_hs[2*j] || gs_det_hs[2*j+1] ) gs_config[j]=1;
+        else gs_config[j]=0;
+    }
+
     std::ofstream ofile;
     ofile.open("output.tex");
     ofile << "\\documentclass[11pt]{article}\n";
@@ -2195,63 +2232,10 @@ int main ()
 
     GenerateCSFS(csfs,spins,dets,configs,det_ms,n_dets,nel);
 
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
-    {
-        std::cout << "CSF " << std::setw(4) << i+1 << ": ";
-        int dindex;
-        for ( unsigned int j = 0; j < csfs[i].count; j++ )
-        {
-            std::cout << std::fixed << std::setprecision(4) << GetCoeff(csfs[i],j) << " |";
-            dindex = GetIndex(csfs[i],j);
-            std::cout << "xz(";
-            if ( dets[dindex][0] && dets[dindex][1] ) std::cout << "2)";
-            else if ( dets[dindex][0] ) std::cout << "a)";
-            else if ( dets[dindex][1] ) std::cout << "b)";
-            else std::cout << "0)";
-            std::cout << "yz(";
-            if ( dets[dindex][2] && dets[dindex][3] ) std::cout << "2)";
-            else if ( dets[dindex][2] ) std::cout << "a)";
-            else if ( dets[dindex][3] ) std::cout << "b)";
-            else std::cout << "0)";
-            std::cout << "xy(";
-            if ( dets[dindex][4] && dets[dindex][5] ) std::cout << "2)";
-            else if ( dets[dindex][4] ) std::cout << "a)";
-            else if ( dets[dindex][5] ) std::cout << "b)";
-            else std::cout << "0)";
-            std::cout << "z2(";
-            if ( dets[dindex][6] && dets[dindex][7] ) std::cout << "2)";
-            else if ( dets[dindex][6] ) std::cout << "a)";
-            else if ( dets[dindex][7] ) std::cout << "b)";
-            else std::cout << "0)";
-            std::cout << "x2y2(";
-            if ( dets[dindex][8] && dets[dindex][9] ) std::cout << "2)";
-            else if ( dets[dindex][8] ) std::cout << "a)";
-            else if ( dets[dindex][9] ) std::cout << "b)";
-            else std::cout << "0)";
-            std::cout << ">  ";
-        }
-        std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
-    }
-
-    std::vector<bool> gs_det_hs(10,false);
-    std::vector<short> gs_config(5,0);
-    std::vector<CSFType> gs_csfs(s+1);
-    std::vector<int> gs_csf_indices(s+1);
-    int gs_index(0);
-
-    for ( auto j : orbs )
-    {
-        gs_det_hs[j] = true;
-    }
-    for ( unsigned int j = 0; j < 5; j++ )
-    {
-        if ( gs_det_hs[2*j] && gs_det_hs[2*j+1] ) gs_config[j]=2;
-        else if ( gs_det_hs[2*j] || gs_det_hs[2*j+1] ) gs_config[j]=1;
-        else gs_config[j]=0;
-    }
-
     std::vector<std::string> labels = {"xz","yz","xy","z^2","x^2-y^2"};
     std::vector<short> order;
+
+    std::string s_string = (s % 2 == 0) ? std::to_string(s/2) : std::to_string(s)+"/2";
 
     ofile << "\\section{$\\left|";
     for ( unsigned int i = 0; i < 5; i++ )
@@ -2278,13 +2262,110 @@ int main ()
             order.push_back(i);
         }
     }
-
-    std::string s_string = (s % 2 == 0) ? std::to_string(s/2) : std::to_string(s)+"/2";
     ofile << "\\right\\rangle$}\n\n";
 
-    ofile << "Here are the CSFs:\\newline\\newline \n\n";
-    
-    ofile << "$\\left|0," <<  s_string << "\\right\\rangle$\n";
+    ofile << "Here are the CSFs:\\newline\\newline\n";
+
+    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    {
+        std::cout << "CSF " << std::setw(4) << i+1 << ": ";
+        int dindex = GetIndex(csfs[i],0);
+
+        std::string s_string = (csfs[i].spin % 2 == 0) ? std::to_string(csfs[i].spin/2) : std::to_string(csfs[i].spin)+"/2";
+        std::string m_string = (det_ms[dindex] % 2 == 0) ? std::to_string(det_ms[dindex]/2) : std::to_string(det_ms[dindex])+"/2";
+        ofile << "$\\left|" << std::to_string(i+1) << ",";
+        ofile <<  s_string << "," << m_string;
+        ofile << "\\right\\rangle=";
+        
+        for ( unsigned int j = 0; j < csfs[i].count; j++ )
+        {
+            double tcoeff = GetCoeff(csfs[i],j);
+            if ( std::abs(tcoeff) > 0.0001 ) 
+            {
+                if ( j > 0 && tcoeff > 0 ) ofile << "+";
+                ofile << std::fixed << std::setprecision(4) << Coeff_To_Tex(tcoeff);
+                ofile << "\\left|";
+                std::cout << std::fixed << std::setprecision(4) << GetCoeff(csfs[i],j) << " |";
+                dindex = GetIndex(csfs[i],j);
+                std::cout << "xz(";
+                ofile << "3d_{xz}^{";
+                if ( dets[dindex][0] && dets[dindex][1] ) 
+                { 
+                    std::cout << "2)"; ofile << "2}";
+                } 
+                else if ( dets[dindex][0] ) 
+                { 
+                    std::cout << "a)"; ofile << "\\alpha}";
+                }
+                else if ( dets[dindex][1] ) 
+                { 
+                    std::cout << "b)"; ofile << "\\beta}";
+                }
+                else 
+                {
+                    std::cout << "0)"; ofile << "0}";
+                }
+                std::cout << "yz("; ofile << "3d_{yz}^{";
+                if ( dets[dindex][2] && dets[dindex][3] ) { 
+                    std::cout << "2)"; ofile << "2}";
+                }
+                else if ( dets[dindex][2] ) {
+                    std::cout << "a)"; ofile << "\\alpha}";
+                }
+                else if ( dets[dindex][3] ) {
+                    std::cout << "b)"; ofile << "\\beta}";
+                }
+                else {
+                    std::cout << "0)"; ofile << "0}";
+                }
+                std::cout << "xy("; ofile << "3d_{xy}^{";
+                if ( dets[dindex][4] && dets[dindex][5] ) 
+                {
+                    std::cout << "2)"; ofile << "2}";
+                }
+                else if ( dets[dindex][4] ) {
+                    std::cout << "a)"; ofile << "\\alpha}";
+                }
+                else if ( dets[dindex][5] ) {
+                    std::cout << "b)"; ofile << "\\beta}";
+                }
+                else {
+                    std::cout << "0)"; ofile << "0}";
+                }
+                std::cout << "z2("; ofile << "3d_{z^2}^{";
+                if ( dets[dindex][6] && dets[dindex][7] ) {
+                    std::cout << "2)"; ofile << "2}";
+                }
+                else if ( dets[dindex][6] ) {
+                    std::cout << "a)"; ofile << "\\alpha}";
+                }
+                else if ( dets[dindex][7] ) {
+                    std::cout << "b)"; ofile << "\\beta}";
+                }
+                else {
+                    std::cout << "0)"; ofile << "0}";
+                }
+                std::cout << "x2y2("; ofile << "3d_{x^2-y^2}^{";
+                if ( dets[dindex][8] && dets[dindex][9] ) {
+                    std::cout << "2)"; ofile << "2}";
+                }
+                else if ( dets[dindex][8] ) {
+                    std::cout << "a)"; ofile << "\\alpha}";
+                }
+                else if ( dets[dindex][9] ) {
+                    std::cout << "b)"; ofile << "\\beta}";
+                }
+                else {
+                    std::cout << "0)"; ofile << "0}";
+                }
+                std::cout << ">  ";
+                ofile << "\\right\\rangle";
+            }
+        }
+        ofile << "$\\newline\n";
+        std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
+    }
+
 
     for ( unsigned int i = 0; i < total_csf_count; i++ )
     {
