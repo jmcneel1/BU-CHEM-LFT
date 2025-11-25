@@ -244,6 +244,12 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "0.8165" ) return sign+"\\\\sqrt{\\frac{2}{3}}";
     else if ( tstring == "0.5774" ) return sign+"\\frac{1}{\\sqrt{3}}";
     else if ( tstring == "0.5000" ) return sign+"\\frac{1}{2}";
+    else if ( tstring == "1.5000" ) return sign+"\\frac{3}{2}";
+    else if ( tstring == "2.0000" ) return sign+"2";
+    else if ( tstring == "2.5000" ) return sign+"\\frac{5}{2}";
+    else if ( tstring == "1.7321" ) return sign+"\\sqrt{3}";
+    else if ( tstring == "3.0000" ) return sign+"3";
+    else if ( tstring == "4.0000" ) return sign+"4";
     return "";
 }
 
@@ -2382,15 +2388,19 @@ int main ()
     }
 
     std::cout << "\nThe Ground State CSFs are ";
+    ofile << "The Ground State CSFs are ";
     for ( unsigned int i = 0; i < gs_csf_indices.size(); i++ )
     {
         std::cout << gs_csf_indices[i]+1 << " ";
+        ofile << gs_csf_indices[i]+1 << " ";
     }
-    std::cout << "\n";
+    ofile << "\\newline\\newline";
+    std::cout << "\n"; ofile << "\\newline\n";
 
     std::cout << "\n\nNow evaluating the G-Tensor. For the G-Tensor, we only need to";
     std::cout << " evaluate a single Ms state, so we'll choose Ms=S:\n\n";
     std::cout << "GXX: ";
+    std::vector<std::string> gxx_components;
     if ( nel <= 5 ) std::cout << "-";
     std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
 
@@ -2400,56 +2410,40 @@ int main ()
         if ( result > 0.01 || result < -0.01 )
         {
             std::cout << std::fixed << std::setprecision(4) << result*result;
+            ofile << "$\\left\\langle";
+            ofile << std::to_string(i+1) << ",";
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\left|L_{x}\\right|";
+            ofile << std::to_string(gs_csf_indices[0]+1) << ",";
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\right\\rangle=";
+            ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
+            gxx_components.push_back(
+                                     Coeff_To_Tex(2.0/double(s)*result*result) + 
+                                     "\\zeta " + 
+                                     "\\Delta_{" + std::to_string(gs_csf_indices[0]+1)+
+                                     "-" + std::to_string(i+1) + "}^{-1}");
             std::cout << " E(|" << i+1 << ">)^(-1)\n";
         }        
     }
 
-    std::cout << "\nGXY: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    if ( gxx_components.size() > 0 )
     {
-        double result1 = std::imag(LX(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LY(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        ofile << "\\newline$\\Delta g_{xx}$\\newline\\newline";
+        for ( unsigned int i = 0; i < gxx_components.size(); i++ )
         {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
+            ofile << "$";
+            std::string pre;
+            if ( nel > 5 ) pre = "+"; else pre = "-";
+            ofile << pre << gxx_components[i] << "$\\newline";
+        }
     }
-
-    std::cout << "\nGXZ: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
-    {
-        double result1 = std::imag(LX(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
-        {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
-    }
-
-    std::cout << "\nGYX: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
-    {
-        double result1 = std::imag(LY(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LX(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
-        {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
-    }
+    ofile << "\\newline\n";
 
     std::cout << "GYY: ";
+    std::vector<std::string> gyy_components;
     if ( nel <= 5 ) std::cout << "-";
     std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
 
@@ -2459,56 +2453,40 @@ int main ()
         if ( result > 0.01 || result < -0.01 )
         {
             std::cout << std::fixed << std::setprecision(4) << result*result;
+            ofile << "$\\left\\langle";
+            ofile << std::to_string(i+1) << ",";
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\left|L_{y}\\right|";
+            ofile << std::to_string(gs_csf_indices[0]+1) << ",";
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\right\\rangle=";
+            ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
+            gyy_components.push_back(
+                                     Coeff_To_Tex(2.0/double(s)*result*result) + 
+                                     "\\zeta " + 
+                                     "\\Delta_{" + std::to_string(gs_csf_indices[0]+1)+
+                                     "-" + std::to_string(i+1) + "}^{-1}");
             std::cout << " E(|" << i+1 << ">)^(-1)\n";
         }        
     }
 
-    std::cout << "\nGYZ: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
+    if ( gyy_components.size() > 0 )
     {
-        double result1 = std::imag(LY(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
+        ofile << "\\newline$\\Delta g_{yy}$\\newline\\newline";
+        for ( unsigned int i = 0; i < gyy_components.size(); i++ )
         {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
+            ofile << "$";
+            std::string pre;
+            if ( nel > 5 ) pre = "+"; else pre = "-";
+            ofile << pre << gyy_components[i] << "$\\newline";
+        }
     }
-
-    std::cout << "\nGZX: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
-    {
-        double result1 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LX(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
-        {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
-    }
-
-    std::cout << "\nGZY: ";
-    if ( nel <= 5 ) std::cout << "-";
-    std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
-    
-    for ( unsigned int i = 0; i < total_csf_count; i++ )
-    {
-        double result1 = std::imag(LZ(gs_csfs[0],csfs[i],dets));
-        double result2 = std::imag(LY(gs_csfs[0],csfs[i],dets));
-        if ( ( result1 > 0.01 || result1 < -0.01 ) && ( result2 > 0.01 || result2 < -0.01 ))
-        {
-            std::cout << std::fixed << std::setprecision(4) << result1*result2;
-            std::cout << " E(|" << i+1 << ">)^(-1)\n";
-        }        
-    }
+    ofile << "\\newline\n";
 
     std::cout << "GZZ: ";
+    std::vector<std::string> gzz_components;
     if ( nel <= 5 ) std::cout << "-";
     std::cout << std::fixed << std::setprecision(3) << 2.0/double(s) << " ζ *\n";
 
@@ -2518,12 +2496,47 @@ int main ()
         if ( result > 0.01 || result < -0.01 )
         {
             std::cout << std::fixed << std::setprecision(4) << result*result;
+            ofile << "$\\left\\langle";
+            ofile << std::to_string(i+1) << ",";
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\left|L_{z}\\right|";
+            ofile << std::to_string(gs_csf_indices[0]+1) << ",";
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << "\\right\\rangle=";
+            ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
+            gzz_components.push_back(
+                                     Coeff_To_Tex(2.0/double(s)*result*result) + 
+                                     "\\zeta " + 
+                                     "\\Delta_{" + std::to_string(gs_csf_indices[0]+1)+
+                                     "-" + std::to_string(i+1) + "}^{-1}");
             std::cout << " E(|" << i+1 << ">)^(-1)\n";
         }        
     }
 
+    if ( gzz_components.size() > 0 )
+    {
+        ofile << "\\newline$\\Delta g_{zz}$\\newline\\newline";
+        for ( unsigned int i = 0; i < gzz_components.size(); i++ )
+        {
+            ofile << "$";
+            std::string pre;
+            if ( nel > 5 ) pre = "+"; else pre = "-";
+            ofile << pre << gzz_components[i] << "$\\newline";
+        }
+    }
+    ofile << "\\newline\n";
+
     if ( s > 1 )
     {
+        ofile << "Model Interaction Matrix\\newline\\newline\n";
+        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
+        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
+        for ( unsigned int ms1 = s; ms1 >= -s; ms1-=2 )
+        {
+            ofile << "&\\left|" << std::to_string(int(s/2.0));
+        }
         std::cout << "\n\nNow let's build the Model Interaction Matrix for S=";
         std::cout << std::fixed << std::setprecision(1) << double(s/2.0) << ":\n\n";
 
@@ -2539,6 +2552,8 @@ int main ()
                 std::cout << HModel(s,ms1,ms2) << "\n\n";
             }
         }
+        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*}\n";
+        else ofile << "\\end{bmatrix}$\n}\\]\n";
 
         std::cout << "Now let's build the General Interaction Matrix:\n\n";
 
