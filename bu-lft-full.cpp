@@ -241,7 +241,7 @@ std::string Coeff_To_Tex ( const double & coeff )
     if ( tstring == "1.0000" ) return sign;
     else if ( tstring == "0.7071" ) return sign+"\\frac{1}{\\sqrt{2}}";
     else if ( tstring == "0.4082" ) return sign+"\\frac{1}{\\sqrt{6}}";
-    else if ( tstring == "0.8165" ) return sign+"\\\\sqrt{\\frac{2}{3}}";
+    else if ( tstring == "0.8165" ) return sign+"\\sqrt{\\frac{2}{3}}";
     else if ( tstring == "0.5774" ) return sign+"\\frac{1}{\\sqrt{3}}";
     else if ( tstring == "0.5000" ) return sign+"\\frac{1}{2}";
     else if ( tstring == "1.5000" ) return sign+"\\frac{3}{2}";
@@ -250,6 +250,10 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "1.7321" ) return sign+"\\sqrt{3}";
     else if ( tstring == "3.0000" ) return sign+"3";
     else if ( tstring == "4.0000" ) return sign+"4";
+    else if ( tstring == "0.2500" ) return sign+"\\frac{1}{4}";
+    else if ( tstring == "0.1875" ) return sign+"\\frac{3}{16}";
+    else if ( tstring == "0.2812" ) return sign+"\\frac{9}{32}";
+    else if ( tstring == "0.0625" ) return sign+"\\frac{1}{16}";
     return "";
 }
 

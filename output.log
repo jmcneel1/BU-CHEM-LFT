@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.6.23)  25 NOV 2025 15:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.6.23)  1 DEC 2025 14:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -423,93 +423,429 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Warning: No \author given.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Overfull \hbox (54.58661pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (54.58661pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (54.58661pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (54.58661pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (60.06161pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OT1/cmr/m/n/10.95 + [] [] + [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OT1/cmr/m/n/10.95 + [] [] + [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OT1/cmr/m/n/10.95 + [] [] + [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OT1/cmr/m/n/10.95 + [] [] + [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OT1/cmr/m/n/10.95 + [] [] + [] []$ 
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] + [] [] +
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@
+ []
+
+
+Overfull \hbox (68.57831pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@
+ []
+
+
+Overfull \hbox (31.79099pt too wide) in paragraph at lines 26--244
+\OML/cmm/m/it/10.95 sqrt[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (31.79099pt too wide) in paragraph at lines 26--244
+\OML/cmm/m/it/10.95 sqrt[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (31.79099pt too wide) in paragraph at lines 26--244
+\OML/cmm/m/it/10.95 sqrt[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (31.79099pt too wide) in paragraph at lines 26--244
+\OML/cmm/m/it/10.95 sqrt[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (31.79099pt too wide) in paragraph at lines 26--244
+\OML/cmm/m/it/10.95 sqrt[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (173.84753pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] + [] [] +
+ []
+
+
+Overfull \hbox (173.84753pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] + [] [] +
+ []
+
+
+Overfull \hbox (173.84753pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] + [] [] +
+ []
+
+
+Overfull \hbox (173.84753pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] + [] [] +
+ []
+
+
+Overfull \hbox (173.84753pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] + [] [] +
+ []
+
+
+Overfull \hbox (143.08066pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] []$ 
+ []
+
+
+Overfull \hbox (143.08066pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] []$ 
+ []
+
+
+Overfull \hbox (143.08066pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] []$ 
+ []
+
+
+Overfull \hbox (143.08066pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] []$ 
+ []
+
+
+Overfull \hbox (143.08066pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] \OT1/cmr/m/
+n/10.95 +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] \OT1/cmr/m/
+n/10.95 +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] \OT1/cmr/m/
+n/10.95 +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] \OT1/cmr/m/
+n/10.95 +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (81.31192pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] + [] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] \OT1/cmr/m/
+n/10.95 +
+ []
+
+
+Overfull \hbox (19.262pt too wide) in paragraph at lines 26--244
+[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] []$ 
+ []
+
+
+Overfull \hbox (164.9808pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] + [] + [] []$ 
+ []
+
+
+Overfull \hbox (164.9808pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] + [] + [] []$ 
+ []
+
+
+Overfull \hbox (164.9808pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] + [] + [] []$ 
+ []
+
+
+Overfull \hbox (164.9808pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] + [] + [] []$ 
+ []
+
+
+Overfull \hbox (164.9808pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] + [] + [] []$ 
+ []
+
+
+Overfull \hbox (74.05331pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] [] \OT1/cmr
+/m/n/10.95 +
+ []
+
+
+Overfull \hbox (74.05331pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] [] \OT1/cmr
+/m/n/10.95 +
+ []
+
+
+Overfull \hbox (74.05331pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] [] \OT1/cmr
+/m/n/10.95 +
+ []
+
+
+Overfull \hbox (74.05331pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] [] \OT1/cmr
+/m/n/10.95 +
+ []
+
+
+Overfull \hbox (74.05331pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = +[] [] \OMS/cmsy/m/n/10.95 ^^@ [] [] ^^@ [] [] \OT1/cmr
+/m/n/10.95 +
+ []
+
+
+Overfull \hbox (302.97507pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] [] [] [] +
+ []
+
+
+Overfull \hbox (302.97507pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] [] [] [] +
+ []
+
+
+Overfull \hbox (302.97507pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] [] [] [] +
+ []
+
+
+Overfull \hbox (302.97507pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] [] [] [] +
+ []
+
+
+Overfull \hbox (302.97507pt too wide) in paragraph at lines 26--244
+[] \OT1/cmr/m/n/10.95 = [] [] [] [] [] [] +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--83
+Underfull \hbox (badness 10000) in paragraph at lines 26--244
 
  []
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] (./output.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6]
+[7] [8] [9] [10] [11] (./output.aux) ) 
 Here is how much of TeX's memory you used:
  6028 strings out of 478287
  100212 string characters out of 5849289
- 429498 words of memory out of 5000000
+ 603498 words of memory out of 5000000
  24146 multiletter control sequences out of 15000+600000
  480505 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 69i,12n,79p,264b,227s stack positions out of 5000i,500n,10000p,200000b,80000s
-</
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on output.pdf (3 pages, 128465 bytes).
+ 69i,12n,79p,750b,227s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy8.pfb>
+Output written on output.pdf (11 pages, 149658 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 105 PDF objects out of 1000 (max. 8388607)
+ 65 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
