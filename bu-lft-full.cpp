@@ -254,6 +254,15 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "0.1875" ) return sign+"\\frac{3}{16}";
     else if ( tstring == "0.2812" ) return sign+"\\frac{9}{32}";
     else if ( tstring == "0.0625" ) return sign+"\\frac{1}{16}";
+    else if ( tstring == "0.0833" ) return sign+"\\frac{1}{12}";
+    else if ( tstring == "0.2887" ) return sign+"\\frac{1}{\\sqrt{12}}";
+    else if ( tstring == "0.8660" ) return sign+"\\frac{\\sqrt{3}}{2}";
+    else if ( tstring == "0.1021" ) return sign+"\\frac{1}{4\\sqrt{6}}";
+    else if ( tstring == "0.0104" ) return sign+"\\frac{1}{96}";
+    else if ( tstring == "0.0417" ) return sign+"\\frac{1}{24}";
+    else if ( tstring == "0.2041" ) return sign+"\\frac{1}{\\sqrt{24}}";
+    else if ( tstring == "0.0255" ) return sign+"\\frac{1}{4\\sqrt{96}}";
+    else if ( tstring == "0.2296" ) return sign+"\\frac{3\\sqrt{3}}{16\\sqrt{2}}";
     return "";
 }
 
@@ -274,8 +283,8 @@ int NumCSF ( short st2, short nel )
     int k1, k2;
     k1content = -nel/2.0 - st2/2.0;
     k2content = nel/2.0 - st2/2.0;
-    k1 = 5 + std::floor(k1content);
-    k2 = std::floor(k2content);
+    k1 = 5 + std::round(k1content);
+    k2 = std::round(k2content);
     result = (st2+1.0)/6.0*Binomial(6,k1)*Binomial(6,k2);
     return std::round(result);
 }
@@ -482,7 +491,7 @@ void GenerateCoeffs (
             }
             std::stringstream ss;
             std::string tot_str;
-            ss << std::fixed << std::setprecision(4) << total;
+            ss << std::fixed << std::setprecision(16) << total;
             ss >> tot_str;
             tcsf.coeffs += tot_str;
             if ( i <  (tcsf.count -1) ) tcsf.coeffs+="_";
@@ -584,7 +593,7 @@ void GenerateCSFS (
                                         found[j] = true;
                                         tcsf.count++;
                                         tcsf.dets+="-"+std::to_string(j);
-                                        tcsf.coeffs+="_1.0000";
+                                        tcsf.coeffs+="_1.0000000000000000";
                                     }
                                 }
                             }
@@ -1379,7 +1388,9 @@ std::complex<double> LY ( const CSFType & lhs, const CSFType & rhs, const std::v
     return total;
 }
 
-std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+std::complex<double> LYSY ( const CSFType & lhs, const CSFType & rhs, 
+                            const std::vector<std::vector<bool>> & dets
+                          )
 {
     std::stringstream ss;
     double rtotal(0.0), itotal(0.0);
