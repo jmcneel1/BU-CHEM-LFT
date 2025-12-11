@@ -911,8 +911,11 @@ std::complex<double> LX ( const CSFType & lhs, const CSFType & rhs, const std::v
     return total;
 }
 
-std::complex<double> LXSX ( const CSFType & lhs, const CSFType & rhs, const std::vector<std::vector<bool>> & dets )
+std::complex<double> LXSX ( const CSFType & lhs, const CSFType & rhs, 
+                            const std::vector<std::vector<bool>> & dets,
+                            std::string & tex_str )
 {
+    tex_str = "";
     std::stringstream ss;
     double rtotal(0.0), itotal(0.0);
     for ( unsigned int i = 0; i < lhs.count; i++ )
@@ -1176,6 +1179,7 @@ std::complex<double> LXSX ( const CSFType & lhs, const CSFType & rhs, const std:
         }
     }
     std::complex<double> total(rtotal,itotal);
+    tex_str = Coeff_To_Tex(std::imag(total))+"I";
     return total;
 }
 
@@ -2091,12 +2095,13 @@ std::string HInt (short s, short ms1, short ms2,
                     const std::vector<std::vector<bool>> & dets )
 {
     std::string result = "";
+    std::string tex_str = "";
     short gs_index1 = (s-ms1)/2;
     short gs_index2 = (s-ms2)/2;
     for ( unsigned int i = 0; i < csfs.size(); i++ )
     {
-        std::complex<double> temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
-        std::complex<double> temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        std::complex<double> temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets,tex_str);
+        std::complex<double> temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets,tex_str);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
@@ -2107,7 +2112,7 @@ std::string HInt (short s, short ms1, short ms2,
 
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets,tex_str);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
@@ -2117,7 +2122,7 @@ std::string HInt (short s, short ms1, short ms2,
 
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets,tex_str);
         temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
@@ -2130,7 +2135,7 @@ std::string HInt (short s, short ms1, short ms2,
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
-        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets,tex_str);
         if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
@@ -2180,7 +2185,7 @@ std::string HInt (short s, short ms1, short ms2,
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
-        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets);
+        temp2 = LXSX(csfs[i],gs_csfs[gs_index2],dets,tex_str);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
