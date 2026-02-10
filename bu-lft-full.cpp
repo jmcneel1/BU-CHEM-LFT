@@ -16,6 +16,92 @@ struct CSFType
     std::string coeffs;
 };
 
+std::string Coeff_To_Tex ( const double & coeff )
+{
+    std::stringstream ss;
+    std::string tstring, sign("");
+    double tcoeff = coeff;
+    if ( tcoeff < 0 ) 
+    {
+        tcoeff*=-1; sign = "-";
+    }
+    ss << std::fixed << std::setprecision(4) << tcoeff;
+    ss >> tstring;
+    if ( tstring == "1.0000" ) return sign;
+    else if ( tstring == "0.0035" ) return sign+"\\frac{1}{288}";
+    else if ( tstring == "0.0069" ) return sign+"\\frac{1}{144}";
+    else if ( tstring == "0.0085" ) return sign+"\\frac{1}{48\\sqrt{6}}";
+    else if ( tstring == "0.0104" ) return sign+"\\frac{1}{96}";
+    else if ( tstring == "0.0139" ) return sign+"\\frac{1}{72}";
+    else if ( tstring == "0.0170" ) return sign+"\\frac{1}{24\\sqrt{6}}";
+    else if ( tstring == "0.0208" ) return sign+"\\frac{1}{48}";
+    else if ( tstring == "0.0241" ) return sign+"\\frac{\\sqrt{3}}{72}";
+    else if ( tstring == "0.0250" ) return sign+"\\frac{1}{40}";
+    else if ( tstring == "0.0255" ) return sign+"\\frac{1}{4\\sqrt{96}}";
+    else if ( tstring == "0.0278" ) return sign+"\\frac{1}{36}";
+    else if ( tstring == "0.0312" ) return sign+"\\frac{1}{32}";
+    else if ( tstring == "0.0313" ) return sign+"\\frac{1}{32}";
+    else if ( tstring == "0.0417" ) return sign+"\\frac{1}{24}";
+    else if ( tstring == "0.0510" ) return sign+"\\frac{1}{8\\sqrt{6}}";
+    else if ( tstring == "0.0556" ) return sign+"\\frac{1}{18}";
+    else if ( tstring == "0.0625" ) return sign+"\\frac{1}{16}";
+    else if ( tstring == "0.0722" ) return sign+"\\frac{\\sqrt{3}}{24}";
+    else if ( tstring == "0.0750" ) return sign+"\\frac{3}{40}";
+    else if ( tstring == "0.0765" ) return sign+"\\frac{\\sqrt{3}}{16\\sqrt{2}}";
+    else if ( tstring == "0.0791" ) return sign+"\\frac{1}{4\\sqrt{10}}";
+    else if ( tstring == "0.0833" ) return sign+"\\frac{1}{12}";
+    else if ( tstring == "0.0937" ) return sign+"\\frac{3}{32}";
+    else if ( tstring == "0.0938" ) return sign+"\\frac{3}{32}";
+    else if ( tstring == "0.0962" ) return sign+"\\frac{1}{3\\sqrt{12}}";
+    else if ( tstring == "0.1021" ) return sign+"\\frac{1}{4\\sqrt{6}}";
+    else if ( tstring == "0.1061" ) return sign+"\\frac{3}{20\\sqrt{2}}";
+    else if ( tstring == "0.1111" ) return sign+"\\frac{1}{9}";
+    else if ( tstring == "0.1250" ) return sign+"\\frac{1}{8}";
+    else if ( tstring == "0.1443" ) return sign+"\\frac{\\sqrt{3}}{12}";
+    else if ( tstring == "0.1500" ) return sign+"\\frac{3}{20}";
+    else if ( tstring == "0.1531" ) return sign+"\\frac{3}{9\\sqrt{6}}";
+    else if ( tstring == "0.1667" ) return sign+"\\frac{1}{6}";
+    else if ( tstring == "0.1875" ) return sign+"\\frac{3}{16}";
+    else if ( tstring == "0.2000" ) return sign+"\\frac{1}{5}";
+    else if ( tstring == "0.2041" ) return sign+"\\frac{1}{\\sqrt{24}}";
+    else if ( tstring == "0.2165" ) return sign+"\\frac{\\sqrt{3}}{8}";
+    else if ( tstring == "0.2222" ) return sign+"\\frac{2}{9}";
+    else if ( tstring == "0.2250" ) return sign+"\\frac{9}{40}";
+    else if ( tstring == "0.2296" ) return sign+"\\frac{3\\sqrt{3}}{16\\sqrt{2}}";
+    else if ( tstring == "0.2372" ) return sign+"\\frac{3}{4\\sqrt{10}}";
+    else if ( tstring == "0.2500" ) return sign+"\\frac{1}{4}";
+    else if ( tstring == "0.2812" ) return sign+"\\frac{9}{32}";
+    else if ( tstring == "0.2813" ) return sign+"\\frac{9}{32}";
+    else if ( tstring == "0.2887" ) return sign+"\\frac{1}{\\sqrt{12}}";
+    else if ( tstring == "0.3000" ) return sign+"\\frac{3}{10}";
+    else if ( tstring == "0.3062" ) return sign+"\\frac{3}{4\\sqrt{6}}";
+    else if ( tstring == "0.3182" ) return sign+"\\frac{9}{20\\sqrt{2}}";
+    else if ( tstring == "0.3333" ) return sign+"\\frac{1}{3}";
+    else if ( tstring == "0.3750" ) return sign+"\\frac{3}{8}";
+    else if ( tstring == "0.4082" ) return sign+"\\frac{1}{\\sqrt{6}}";
+    else if ( tstring == "0.4330" ) return sign+"\\frac{\\sqrt{3}}{4}";
+    else if ( tstring == "0.4444" ) return sign+"\\frac{4}{9}";
+    else if ( tstring == "0.4500" ) return sign+"\\frac{9}{20}";
+    else if ( tstring == "0.5000" ) return sign+"\\frac{1}{2}";
+    else if ( tstring == "0.5774" ) return sign+"\\frac{1}{\\sqrt{3}}";
+    else if ( tstring == "0.6667" ) return sign+"\\frac{2}{3}";
+    else if ( tstring == "0.7071" ) return sign+"\\frac{1}{\\sqrt{2}}";
+    else if ( tstring == "0.7500" ) return sign+"\\frac{3}{4}";
+    else if ( tstring == "0.8000" ) return sign+"\\frac{4}{5}";
+    else if ( tstring == "0.8165" ) return sign+"\\sqrt{\\frac{2}{3}}";
+    else if ( tstring == "0.8660" ) return sign+"\\frac{\\sqrt{3}}{2}";
+    else if ( tstring == "0.8889" ) return sign+"\\frac{8}{9}";
+    else if ( tstring == "1.2000" ) return sign+"\\frac{6}{5}";
+    else if ( tstring == "1.3333" ) return sign+"\\frac{4}{3}";
+    else if ( tstring == "1.5000" ) return sign+"\\frac{3}{2}";
+    else if ( tstring == "1.7321" ) return sign+"\\sqrt{3}";
+    else if ( tstring == "2.0000" ) return sign+"2";
+    else if ( tstring == "2.5000" ) return sign+"\\frac{5}{2}";
+    else if ( tstring == "3.0000" ) return sign+"3";
+    else if ( tstring == "4.0000" ) return sign+"4";
+    return "";
+}
+
 std::string HModel (short s, short ms1, short ms2 )
 {
     std::string result = "";
@@ -174,6 +260,164 @@ std::string HModel (short s, short ms1, short ms2 )
     return result;
 }
 
+std::string HModelTex (short s, short ms1, short ms2 )
+{
+    std::string result = "";
+    if ( s == 2 )
+    {
+        if ( ms1 == 2 )
+        {
+            if ( ms2 == 2 ) result = Coeff_To_Tex(0.5000)+"\\left(D_{xx}+D_{yy}\\right)+D_{zz}";
+            else if ( ms2 == 0) result = Coeff_To_Tex(0.7071)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else result = Coeff_To_Tex(0.5000)+"\\left(D_{xx}-Dyy+2iD_{xy}\\right)";
+        }
+        else if ( ms1 == 0 )
+        {
+            if ( ms2 == 2 ) result = Coeff_To_Tex(0.7071)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 0 ) result = "D_{xx}+D_{yy}";
+            else result = "-"+Coeff_To_Tex(0.7071)+"\\left(D_{xz}+iD_{yz}\\right)";
+        }
+        else
+        {
+            if ( ms2 == 2 ) result = Coeff_To_Tex(0.5000)+"\\left(D_{xx}-D_{yy}-iD_{xy}\\right)";
+            else if ( ms2 == 0 ) result = "-"+Coeff_To_Tex(0.7071)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else result = "-"+Coeff_To_Tex(0.5000)+"\\left(D_{xx}+D_{yy}\\right)+D_{zz}";
+        }
+    }
+    else if ( s == 3 )
+    {
+        if ( ms1 == 3 )
+        {
+            if ( ms2 == 3 ) result = Coeff_To_Tex(0.7500)+"\\left(D_{xx}+D_{yy}+3D_{zz}\\right)";
+            else if ( ms2 == 1) result = Coeff_To_Tex(1.7321)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else if ( ms2 == -1 ) result = Coeff_To_Tex(0.8660)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
+            else result = "0";
+        }
+        else if ( ms1 == 1 )
+        {
+            if ( ms2 == 3 ) result = Coeff_To_Tex(1.7321)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(0.2500)+"\\left(7D_{xx}+7D_{yy}+D_{zz}\\right)";
+            else if ( ms2 == -1 ) result = "0";
+            else result = Coeff_To_Tex(0.8660)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
+        }
+        else if ( ms1 == -1 )
+        {
+            if ( ms2 == 3 ) result = Coeff_To_Tex(0.8660)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = Coeff_To_Tex(0.2500)+"\\left(7D_{xx}+7D_{yy}+D_{zz}\\right)";
+            else result = "-"+Coeff_To_Tex(1.7321)+"\\left(D_{xz}+iD_{yz}\\right)";
+        }
+        else
+        {
+            if ( ms2 == 3 ) result = "0";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(0.8660)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == -1 ) result = "-"+Coeff_To_Tex(1.7321)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else result = Coeff_To_Tex(0.7500)+"\\left(D_{xx}+D_{yy}+3D_{zz}\\right)";
+        }
+    }
+    else if ( s == 4 )
+    {
+        if ( ms1 == 4 )
+        {
+            if ( ms2 == 4 ) result = "D_{xx}+D_{yy}+4D_{zz}";
+            else if ( ms2 == 2) result = "3\\left(D_{xz}+iD_{yz}\\right)";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -2 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 2 )
+        {
+            if ( ms2 == 4 ) result = "3(Dxz-iDyz)";
+            else if ( ms2 == 2) result = "0.5(5Dxx+5Dyy+2Dzz)";
+            else if ( ms2 == 0 ) result = "1.225(Dxz+iDyz)";
+            else if ( ms2 == -2 ) result = "1.5(Dxx-Dyy+2iDxy)";
+            else result = "0";
+        }
+        else if ( ms1 == 0 )
+        {
+            if ( ms2 == 4 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 2) result = "1.225(Dxz-iDyz)";
+            else if ( ms2 == 0 ) result = "3(Dxx+Dyy)";
+            else if ( ms2 == -2 ) result = "-1.225(Dxz-iDyz)";
+            else result = "1.225(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == -2 )
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "1.5(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 0 ) result = "-1.225(Dxz-Dyz)";
+            else if ( ms2 == -2 ) result = "0.5(5Dxx+5Dyy+2Dzz)";
+            else result = "-3(Dxz+iDyz)";
+        }
+        else
+        {
+            if ( ms2 == 4 ) result = "0";
+            else if ( ms2 == 2) result = "0";
+            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
+            else result = "Dxx+Dyy+4Dzz";
+        }
+    }
+    else
+    {
+        if ( ms1 == 5 )
+        {
+            if ( ms2 == 5 ) result = "1.25(Dxx+Dyy+5Dzz)";
+            else if ( ms2 == 3) result = "4.472(Dxz+iDyz)";
+            else if ( ms2 == 1 ) result = "1.581(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -1 ) result = "0";
+            else if ( ms2 == -3 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 3 )
+        {
+            if ( ms2 == 5 ) result = "4.472(Dxz-iDyz)";
+            else if ( ms2 == 3) result = "0.25(13Dxx+13Dyy+9Dzz)";
+            else if ( ms2 == 1 ) result = "2.828(Dxz+iDyz)";
+            else if ( ms2 == -1 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -3 ) result = "0";
+            else result = "0";
+        }
+        else if ( ms1 == 1 )
+        {
+            if ( ms2 == 5 ) result = "1.581(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 3) result = "2.828(Dxz-iDyz)";
+            else if ( ms2 == 1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
+            else if ( ms2 == -1 ) result = "0";
+            else if ( ms2 == -3 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            else result = "0";
+        }
+        else if ( ms1 == -1 )
+        {
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
+            else if ( ms2 == -3 ) result = "-2.828(Dxz+iDyz)";
+            else result = "1.581(Dxx-Dyy+2iDxy)";
+        }
+        else if ( ms1 == -3 )
+        {
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "0";
+            else if ( ms2 == 1 ) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -1 ) result = "-2.828(Dxz-iDyz)";
+            else if ( ms2 == -3 ) result = "0.25(13Dxx+13Dyy+9Dzz)";
+            else result = "-4.472(Dxz+iDyz)";
+        }
+        else
+        {
+            if ( ms2 == 5 ) result = "0";
+            else if ( ms2 == 3) result = "0";
+            else if ( ms2 == 1 ) result = "0";
+            else if ( ms2 == -1 ) result = "1.581(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == -3 ) result = "-4.472(Dxz-iDyz)";
+            else result = "1.25(Dxx+Dyy+5Dzz)";
+        }
+    }
+    return result;
+}
+
 int GetIndex ( const CSFType & csf, const int & id )
 {
     int index(0), opos(0), npos(0);
@@ -225,92 +469,6 @@ double Clebsch ( bool t, bool sigma, short st2, short mt2 )
         else return std::pow((s+1+m)/(2*(s+1)),0.5);
     }
 
-}
-
-std::string Coeff_To_Tex ( const double & coeff )
-{
-    std::stringstream ss;
-    std::string tstring, sign("");
-    double tcoeff = coeff;
-    if ( tcoeff < 0 ) 
-    {
-        tcoeff*=-1; sign = "-";
-    }
-    ss << std::fixed << std::setprecision(4) << tcoeff;
-    ss >> tstring;
-    if ( tstring == "1.0000" ) return sign;
-    else if ( tstring == "0.0035" ) return sign+"\\frac{1}{288}";
-    else if ( tstring == "0.0069" ) return sign+"\\frac{1}{144}";
-    else if ( tstring == "0.0085" ) return sign+"\\frac{1}{48\\sqrt{6}}";
-    else if ( tstring == "0.0104" ) return sign+"\\frac{1}{96}";
-    else if ( tstring == "0.0139" ) return sign+"\\frac{1}{72}";
-    else if ( tstring == "0.0170" ) return sign+"\\frac{1}{24\\sqrt{6}}";
-    else if ( tstring == "0.0208" ) return sign+"\\frac{1}{48}";
-    else if ( tstring == "0.0241" ) return sign+"\\frac{\\sqrt{3}}{72}";
-    else if ( tstring == "0.0250" ) return sign+"\\frac{1}{40}";
-    else if ( tstring == "0.0255" ) return sign+"\\frac{1}{4\\sqrt{96}}";
-    else if ( tstring == "0.0278" ) return sign+"\\frac{1}{36}";
-    else if ( tstring == "0.0312" ) return sign+"\\frac{1}{32}";
-    else if ( tstring == "0.0313" ) return sign+"\\frac{1}{32}";
-    else if ( tstring == "0.0417" ) return sign+"\\frac{1}{24}";
-    else if ( tstring == "0.0510" ) return sign+"\\frac{1}{8\\sqrt{6}}";
-    else if ( tstring == "0.0556" ) return sign+"\\frac{1}{18}";
-    else if ( tstring == "0.0625" ) return sign+"\\frac{1}{16}";
-    else if ( tstring == "0.0722" ) return sign+"\\frac{\\sqrt{3}}{24}";
-    else if ( tstring == "0.0750" ) return sign+"\\frac{3}{40}";
-    else if ( tstring == "0.0765" ) return sign+"\\frac{\\sqrt{3}}{16\\sqrt{2}}";
-    else if ( tstring == "0.0791" ) return sign+"\\frac{1}{4\\sqrt{10}}";
-    else if ( tstring == "0.0833" ) return sign+"\\frac{1}{12}";
-    else if ( tstring == "0.0937" ) return sign+"\\frac{3}{32}";
-    else if ( tstring == "0.0938" ) return sign+"\\frac{3}{32}";
-    else if ( tstring == "0.0962" ) return sign+"\\frac{1}{3\\sqrt{12}}";
-    else if ( tstring == "0.1021" ) return sign+"\\frac{1}{4\\sqrt{6}}";
-    else if ( tstring == "0.1061" ) return sign+"\\frac{3}{20\\sqrt{2}}";
-    else if ( tstring == "0.1111" ) return sign+"\\frac{1}{9}";
-    else if ( tstring == "0.1250" ) return sign+"\\frac{1}{8}";
-    else if ( tstring == "0.1443" ) return sign+"\\frac{\\sqrt{3}}{12}";
-    else if ( tstring == "0.1500" ) return sign+"\\frac{3}{20}";
-    else if ( tstring == "0.1531" ) return sign+"\\frac{3}{9\\sqrt{6}}";
-    else if ( tstring == "0.1667" ) return sign+"\\frac{1}{6}";
-    else if ( tstring == "0.1875" ) return sign+"\\frac{3}{16}";
-    else if ( tstring == "0.2000" ) return sign+"\\frac{1}{5}";
-    else if ( tstring == "0.2041" ) return sign+"\\frac{1}{\\sqrt{24}}";
-    else if ( tstring == "0.2165" ) return sign+"\\frac{\\sqrt{3}}{8}";
-    else if ( tstring == "0.2222" ) return sign+"\\frac{2}{9}";
-    else if ( tstring == "0.2250" ) return sign+"\\frac{9}{40}";
-    else if ( tstring == "0.2296" ) return sign+"\\frac{3\\sqrt{3}}{16\\sqrt{2}}";
-    else if ( tstring == "0.2372" ) return sign+"\\frac{3}{4\\sqrt{10}}";
-    else if ( tstring == "0.2500" ) return sign+"\\frac{1}{4}";
-    else if ( tstring == "0.2812" ) return sign+"\\frac{9}{32}";
-    else if ( tstring == "0.2813" ) return sign+"\\frac{9}{32}";
-    else if ( tstring == "0.2887" ) return sign+"\\frac{1}{\\sqrt{12}}";
-    else if ( tstring == "0.3000" ) return sign+"\\frac{3}{10}";
-    else if ( tstring == "0.3062" ) return sign+"\\frac{3}{4\\sqrt{6}}";
-    else if ( tstring == "0.3182" ) return sign+"\\frac{9}{20\\sqrt{2}}";
-    else if ( tstring == "0.3333" ) return sign+"\\frac{1}{3}";
-    else if ( tstring == "0.3750" ) return sign+"\\frac{3}{8}";
-    else if ( tstring == "0.4082" ) return sign+"\\frac{1}{\\sqrt{6}}";
-    else if ( tstring == "0.4330" ) return sign+"\\frac{\\sqrt{3}}{4}";
-    else if ( tstring == "0.4444" ) return sign+"\\frac{4}{9}";
-    else if ( tstring == "0.4500" ) return sign+"\\frac{9}{20}";
-    else if ( tstring == "0.5000" ) return sign+"\\frac{1}{2}";
-    else if ( tstring == "0.5774" ) return sign+"\\frac{1}{\\sqrt{3}}";
-    else if ( tstring == "0.6667" ) return sign+"\\frac{2}{3}";
-    else if ( tstring == "0.7071" ) return sign+"\\frac{1}{\\sqrt{2}}";
-    else if ( tstring == "0.7500" ) return sign+"\\frac{3}{4}";
-    else if ( tstring == "0.8000" ) return sign+"\\frac{4}{5}";
-    else if ( tstring == "0.8165" ) return sign+"\\sqrt{\\frac{2}{3}}";
-    else if ( tstring == "0.8660" ) return sign+"\\frac{\\sqrt{3}}{2}";
-    else if ( tstring == "0.8889" ) return sign+"\\frac{8}{9}";
-    else if ( tstring == "1.2000" ) return sign+"\\frac{6}{5}";
-    else if ( tstring == "1.3333" ) return sign+"\\frac{4}{3}";
-    else if ( tstring == "1.5000" ) return sign+"\\frac{3}{2}";
-    else if ( tstring == "1.7321" ) return sign+"\\sqrt{3}";
-    else if ( tstring == "2.0000" ) return sign+"2";
-    else if ( tstring == "2.5000" ) return sign+"\\frac{5}{2}";
-    else if ( tstring == "3.0000" ) return sign+"3";
-    else if ( tstring == "4.0000" ) return sign+"4";
-    return "";
 }
 
 int Factorial ( const int & num )
@@ -2345,16 +2503,32 @@ int main ()
 
         std::string s_string = (csfs[i].spin % 2 == 0) ? std::to_string(csfs[i].spin/2) : std::to_string(csfs[i].spin)+"/2";
         std::string m_string = (det_ms[dindex] % 2 == 0) ? std::to_string(det_ms[dindex]/2) : std::to_string(det_ms[dindex])+"/2";
-        ofile << "$\\left|" << std::to_string(i+1) << ",";
-        ofile <<  s_string << "," << m_string;
-        ofile << "\\right\\rangle=";
-        
-        unsigned int tcount =  0;
+
+        unsigned int rsize =  0;
         for ( unsigned int j = 0; j < csfs[i].count; j++ )
         {
             double tcoeff = GetCoeff(csfs[i],j);
             if ( std::abs(tcoeff) > 0.0001 ) 
             {
+                rsize++;
+            }
+        }
+
+        ofile << "\\begin{equation*}\n";
+        if ( rsize > 2 ) ofile << "\\begin{split}\n";
+        ofile << "\\left|";
+        ofile << std::to_string(i+1) << ",";
+        ofile <<  s_string << "," << m_string;
+        ofile << "\\right>=";
+        if ( rsize > 2 ) ofile << " & ";
+
+        unsigned int tcount = 0;
+        for ( unsigned int j = 0; j < csfs[i].count; j++ )
+        {
+            double tcoeff = GetCoeff(csfs[i],j);
+            if ( std::abs(tcoeff) > 0.0001 ) 
+            {
+                tcount++;
                 if ( j > 0 && tcoeff > 0 ) ofile << "+";
                 ofile << std::fixed << std::setprecision(4) << Coeff_To_Tex(tcoeff);
                 ofile << "\\left|";
@@ -2432,12 +2606,12 @@ int main ()
                     std::cout << "0)"; ofile << "0}";
                 }
                 std::cout << ">  ";
-                ofile << "\\right\\rangle";
-                if ( tcount % 2 == 1 ) ofile << "$\\newline$";
-                tcount++;
+                ofile << "\\right>";
+                if ( tcount % 2 == 0 && tcount < rsize ) ofile << " \\\\ & ";
             }
         }
-        ofile << "$\\newline\n";
+        if ( rsize > 2 ) ofile << "\\end{split}\n";
+        ofile << "\\end{equation*}\n";
         std::cout << " (S=" << csfs[i].spin/2.0 << ",MS=" << det_ms[dindex]/2. << ")\n";
     }
 
@@ -2614,15 +2788,38 @@ int main ()
             for ( int ms2 = s; ms2 >= -s; ms2-=2 )
             {
                 std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
+                ofile << "\\left\\langle" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
+                ofile << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
                 std::cout << "|H(mod)|" << std::fixed << std::setprecision(1) << double(s/2.0);
+                ofile << "\\left|H_{mod}\\right|" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
+                ofile << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
                 std::cout << ">:\n";
+                if ( ms2 > -s ) ofile << "\\right\\rangle & ";
+                else ofile << "\\right\\rangle \\\\";
                 std::cout << HModel(s,ms1,ms2) << "\n\n";
             }
         }
-        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*}\n";
-        else ofile << "\\end{bmatrix}$\n}\\]\n";
+
+        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
+        else ofile << "\\end{bmatrix}$\n}\\] = \n";
+
+        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
+        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
+
+        for ( int ms1 = s; ms1 >= -s; ms1-=2 )
+        {
+            for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+            {
+                ofile << HModelTex(s,ms1,ms2);
+                if ( ms2 > -s ) ofile << " & ";
+                else ofile << " \\\\";
+            }
+        }
+
+        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
+        else ofile << "\\end{bmatrix}$\n}\\] \n";
 
         std::cout << "Now let's build the General Interaction Matrix:\n\n";
 
