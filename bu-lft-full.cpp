@@ -407,17 +407,17 @@ std::string HModelTex (short s, short ms1, short ms2 )
             if ( ms2 == 5 ) result = "0";
             else if ( ms2 == 3) result = "0";
             else if ( ms2 == 1 ) result = Coeff_To_Tex(2.1213)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
-            else if ( ms2 == -1 ) result = "-2.828(Dxz-iDyz)";
-            else if ( ms2 == -3 ) result = "0.25(13Dxx+13Dyy+9Dzz)";
-            else result = "-4.472(Dxz+iDyz)";
+            else if ( ms2 == -1 ) result = "-"+Coeff_To_Tex(2.8284)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == -3 ) result = Coeff_To_Tex(0.2500)+"\\left(13D_{xx}+13D_{yy}+9D_{zz}\\right)";
+            else result = "-"+Coeff_To_Tex(4.4721)+"\\left(D_{xz}+iD_{yz}\\right)";
         }
         else
         {
             if ( ms2 == 5 ) result = "0";
             else if ( ms2 == 3) result = "0";
             else if ( ms2 == 1 ) result = "0";
-            else if ( ms2 == -1 ) result = "1.581(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == -3 ) result = "-4.472(Dxz-iDyz)";
+            else if ( ms2 == -1 ) result = Coeff_To_Tex(1.5811)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == -3 ) result = "-"+Coeff_To_Tex(4.4721)+"\\left(D_{xz}-iD_{yz}\\right)";
             else result = "1.25(Dxx+Dyy+5Dzz)";
         }
     }
