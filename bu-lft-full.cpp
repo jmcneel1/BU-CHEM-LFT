@@ -92,13 +92,19 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "0.8660" ) return sign+"\\frac{\\sqrt{3}}{2}";
     else if ( tstring == "0.8889" ) return sign+"\\frac{8}{9}";
     else if ( tstring == "1.2000" ) return sign+"\\frac{6}{5}";
+    else if ( tstring == "1.2247" ) return sign+"\\sqrt{\\frac{3}{2}}";
+    else if ( tstring == "1.2500" ) return sign+"\\frac{5}{4}";
     else if ( tstring == "1.3333" ) return sign+"\\frac{4}{3}";
     else if ( tstring == "1.5000" ) return sign+"\\frac{3}{2}";
+    else if ( tstring == "1.5811" ) return sign+"\\frac{5}{2}";
     else if ( tstring == "1.7321" ) return sign+"\\sqrt{3}";
     else if ( tstring == "2.0000" ) return sign+"2";
+    else if ( tstring == "2.1213" ) return sign+"\\frac{3}{\\sqrt{2}}";
     else if ( tstring == "2.5000" ) return sign+"\\frac{5}{2}";
+    else if ( tstring == "2.8284" ) return sign+"2\\sqrt{2}";
     else if ( tstring == "3.0000" ) return sign+"3";
     else if ( tstring == "4.0000" ) return sign+"4";
+    else if ( tstring == "4.4721" ) return sign+"2\\sqrt{5}";
     return "";
 }
 
@@ -321,86 +327,86 @@ std::string HModelTex (short s, short ms1, short ms2 )
         {
             if ( ms2 == 4 ) result = "D_{xx}+D_{yy}+4D_{zz}";
             else if ( ms2 == 2) result = "3\\left(D_{xz}+iD_{yz}\\right)";
-            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == 0 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\left)";
             else if ( ms2 == -2 ) result = "0";
             else result = "0";
         }
         else if ( ms1 == 2 )
         {
-            if ( ms2 == 4 ) result = "3(Dxz-iDyz)";
-            else if ( ms2 == 2) result = "0.5(5Dxx+5Dyy+2Dzz)";
-            else if ( ms2 == 0 ) result = "1.225(Dxz+iDyz)";
-            else if ( ms2 == -2 ) result = "1.5(Dxx-Dyy+2iDxy)";
+            if ( ms2 == 4 ) result = "3\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 2) result = Coeff_To_Tex(0.5000)+"\\left(5D_{xx}+5D_{yy}+2D_{zz}\\right)";
+            else if ( ms2 == 0 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else if ( ms2 == -2 ) result = Coeff_To_Tex(1.5000)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
             else result = "0";
         }
         else if ( ms1 == 0 )
         {
-            if ( ms2 == 4 ) result = "1.225(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == 2) result = "1.225(Dxz-iDyz)";
-            else if ( ms2 == 0 ) result = "3(Dxx+Dyy)";
-            else if ( ms2 == -2 ) result = "-1.225(Dxz-iDyz)";
-            else result = "1.225(Dxx-Dyy+2iDxy)";
+            if ( ms2 == 4 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == 2) result = Coeff_To_Tex(1.2247)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 0 ) result = "3\\left(D_{xx}+D_{yy}\\right)";
+            else if ( ms2 == -2 ) result = "-"+Coeff_To_Tex(1.2247)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
         }
         else if ( ms1 == -2 )
         {
             if ( ms2 == 4 ) result = "0";
-            else if ( ms2 == 2) result = "1.5(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == 0 ) result = "-1.225(Dxz-Dyz)";
-            else if ( ms2 == -2 ) result = "0.5(5Dxx+5Dyy+2Dzz)";
-            else result = "-3(Dxz+iDyz)";
+            else if ( ms2 == 2) result = Coeff_To_Tex(1.5000)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == 0 ) result = "-"+Coeff_To_Tex(1.2247)+"\\left(D_{xz}-D_{yz}\\right)";
+            else if ( ms2 == -2 ) result = Coeff_To_Tex(0.5000)+"\\left(5D_{xx}+5D_{yy}+2D_{zz}\\right)";
+            else result = "-3\\left(D_{xz}+iD_{yz}\\right)";
         }
         else
         {
             if ( ms2 == 4 ) result = "0";
             else if ( ms2 == 2) result = "0";
-            else if ( ms2 == 0 ) result = "1.225(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == -2 ) result = "-3(Dxz-iDyz)";
-            else result = "Dxx+Dyy+4Dzz";
+            else if ( ms2 == 0 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == -2 ) result = "-3\\left(D_{xz}-iD_{yz}\\right)";
+            else result = "D_{xx}+D_{yy}+4D_{zz}";
         }
     }
     else
     {
         if ( ms1 == 5 )
         {
-            if ( ms2 == 5 ) result = "1.25(Dxx+Dyy+5Dzz)";
-            else if ( ms2 == 3) result = "4.472(Dxz+iDyz)";
-            else if ( ms2 == 1 ) result = "1.581(Dxx-Dyy+2iDxy)";
+            if ( ms2 == 5 ) result = Coeff_To_Tex(1.2500)+"\\left(D_{xx}+D_{yy}+5D_{zz}\\right)";
+            else if ( ms2 == 3) result = Coeff_To_Tex(4.4721)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(1.5811)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
             else if ( ms2 == -1 ) result = "0";
             else if ( ms2 == -3 ) result = "0";
             else result = "0";
         }
         else if ( ms1 == 3 )
         {
-            if ( ms2 == 5 ) result = "4.472(Dxz-iDyz)";
-            else if ( ms2 == 3) result = "0.25(13Dxx+13Dyy+9Dzz)";
-            else if ( ms2 == 1 ) result = "2.828(Dxz+iDyz)";
-            else if ( ms2 == -1 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            if ( ms2 == 5 ) result = Coeff_To_Tex(4.4721)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 3) result = Coeff_To_Tex(0.2500)+"\\left(13D_{xx}+13D_{yy}+9D_{zz}\\right)";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(2.8284)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else if ( ms2 == -1 ) result = Coeff_To_Tex(2.1213)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
             else if ( ms2 == -3 ) result = "0";
             else result = "0";
         }
         else if ( ms1 == 1 )
         {
-            if ( ms2 == 5 ) result = "1.581(Dxx-Dyy-2iDxy)";
-            else if ( ms2 == 3) result = "2.828(Dxz-iDyz)";
-            else if ( ms2 == 1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
+            if ( ms2 == 5 ) result = Coeff_To_Tex(1.5811)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
+            else if ( ms2 == 3) result = Coeff_To_Tex(2.8284)+"\\left(D_{xz}-iD_{yz}\\right)";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(0.2500)+"\\left(17D_{xx}+17D_{yy}+D_{zz}\\right)";
             else if ( ms2 == -1 ) result = "0";
-            else if ( ms2 == -3 ) result = "2.121(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -3 ) result = Coeff_To_Tex(2.1213)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
             else result = "0";
         }
         else if ( ms1 == -1 )
         {
             if ( ms2 == 5 ) result = "0";
-            else if ( ms2 == 3) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 3) result = Coeff_To_Tex(2.1213)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
             else if ( ms2 == 1 ) result = "0";
-            else if ( ms2 == -1 ) result = "0.25(17Dxx+17Dyy+Dzz)";
-            else if ( ms2 == -3 ) result = "-2.828(Dxz+iDyz)";
-            else result = "1.581(Dxx-Dyy+2iDxy)";
+            else if ( ms2 == -1 ) result = Coeff_To_Tex(0.2500)+"\\left(17D_{xx}+17D_{yy}+D_{zz}\\right)";
+            else if ( ms2 == -3 ) result = "-"+Coeff_To_Tex(2.8284)+"\\left(D_{xz}+iD_{yz}\\right)";
+            else result = Coeff_To_Tex(1.5811)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
         }
         else if ( ms1 == -3 )
         {
             if ( ms2 == 5 ) result = "0";
             else if ( ms2 == 3) result = "0";
-            else if ( ms2 == 1 ) result = "2.121(Dxx-Dyy-2iDxy)";
+            else if ( ms2 == 1 ) result = Coeff_To_Tex(2.1213)+"\\left(D_{xx}-D_{yy}-2iD_{xy}\\right)";
             else if ( ms2 == -1 ) result = "-2.828(Dxz-iDyz)";
             else if ( ms2 == -3 ) result = "0.25(13Dxx+13Dyy+9Dzz)";
             else result = "-4.472(Dxz+iDyz)";
