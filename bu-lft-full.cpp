@@ -327,7 +327,7 @@ std::string HModelTex (short s, short ms1, short ms2 )
         {
             if ( ms2 == 4 ) result = "D_{xx}+D_{yy}+4D_{zz}";
             else if ( ms2 == 2) result = "3\\left(D_{xz}+iD_{yz}\\right)";
-            else if ( ms2 == 0 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\left)";
+            else if ( ms2 == 0 ) result = Coeff_To_Tex(1.2247)+"\\left(D_{xx}-D_{yy}+2iD_{xy}\\right)";
             else if ( ms2 == -2 ) result = "0";
             else result = "0";
         }
@@ -2661,12 +2661,12 @@ int main ()
             std::cout << std::fixed << std::setprecision(4) << result*result;
             ofile << "$\\left\\langle";
             ofile << std::to_string(i+1) << ",";
-            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == ""  ? "1" : Coeff_To_Tex(csfs[i].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\left|L_{x}\\right|";
             ofile << std::to_string(gs_csf_indices[0]+1) << ",";
-            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\right\\rangle=";
             ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
             gxx_components.push_back(
@@ -2704,12 +2704,12 @@ int main ()
             std::cout << std::fixed << std::setprecision(4) << result*result;
             ofile << "$\\left\\langle";
             ofile << std::to_string(i+1) << ",";
-            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == ""  ? "1" : Coeff_To_Tex(csfs[i].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\left|L_{y}\\right|";
             ofile << std::to_string(gs_csf_indices[0]+1) << ",";
-            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\right\\rangle=";
             ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
             gyy_components.push_back(
@@ -2747,12 +2747,12 @@ int main ()
             std::cout << std::fixed << std::setprecision(4) << result*result;
             ofile << "$\\left\\langle";
             ofile << std::to_string(i+1) << ",";
-            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(csfs[i].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(csfs[i].spin/2.0) == ""  ? "1" : Coeff_To_Tex(csfs[i].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\left|L_{z}\\right|";
             ofile << std::to_string(gs_csf_indices[0]+1) << ",";
-            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
-            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == "" ) ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0);
+            ofile << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
+            ofile << "," << ( Coeff_To_Tex(gs_csfs[0].spin/2.0) == ""  ? "1" : Coeff_To_Tex(gs_csfs[0].spin/2.0));
             ofile << "\\right\\rangle=";
             ofile << Coeff_To_Tex(-1.0*result) << "I$\\newline\n";
             gzz_components.push_back(
