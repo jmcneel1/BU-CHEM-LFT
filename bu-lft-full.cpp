@@ -28,6 +28,7 @@ std::string Coeff_To_Tex ( const double & coeff )
     ss << std::fixed << std::setprecision(4) << tcoeff;
     ss >> tstring;
     if ( tstring == "1.0000" ) return sign;
+    else if ( tstring == "0.0000" ) return "0";
     else if ( tstring == "0.0035" ) return sign+"\\frac{1}{288}";
     else if ( tstring == "0.0069" ) return sign+"\\frac{1}{144}";
     else if ( tstring == "0.0085" ) return sign+"\\frac{1}{48\\sqrt{6}}";
@@ -91,6 +92,7 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "0.8165" ) return sign+"\\sqrt{\\frac{2}{3}}";
     else if ( tstring == "0.8660" ) return sign+"\\frac{\\sqrt{3}}{2}";
     else if ( tstring == "0.8889" ) return sign+"\\frac{8}{9}";
+    else if ( tstring == "1.0000" ) return sign+"1";
     else if ( tstring == "1.2000" ) return sign+"\\frac{6}{5}";
     else if ( tstring == "1.2247" ) return sign+"\\sqrt{\\frac{3}{2}}";
     else if ( tstring == "1.2500" ) return sign+"\\frac{5}{4}";
@@ -105,6 +107,63 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "3.0000" ) return sign+"3";
     else if ( tstring == "4.0000" ) return sign+"4";
     else if ( tstring == "4.4721" ) return sign+"2\\sqrt{5}";
+    return "";
+}
+
+std::string DTex ( short s )
+{
+    if ( ( s == 2 ) || ( s == 8 ) )
+    {
+        return "\n$D=\\left\\langle1,1|1,1\\right\\rangle-"
+               "\\left\\langle1,0|1,0\\right\\rangle$";
+    }
+    else if ( ( s == 3 ) || ( s == 7 ) )
+    {
+        return "\n$D=\\frac{1}{2}\\left(\\left\\langle\\frac{3}{2},"
+               "\\frac{3}{2}|\\frac{3}{2},\\frac{3}{2}"
+               "\\right\\rangle-\\left\\langle\\frac{3}{2},"
+               "\\frac{1}{2}|\\frac{3}{2},\\frac{1}{2}"
+               "\\right\\rangle\\right)$";
+    }
+    else if ( ( s == 4 ) || ( s == 6 ) )
+    {
+        return "\n$D=\\frac{1}{4}\\left(\\left\\langle"
+               "2,2|2,2\\right\\rangle-\\left\\langle2,0|2,0"
+               "\\right\\rangle\\right)$";
+    }
+    else if ( s == 5 )
+    {
+        return "\n$D=\\frac{1}{4}\\left(\\left\\langle"
+               "\\frac{5}{2},\\frac{5}{2}|\\frac{5}{2},"
+               "\\frac{5}{2}\\right\\rangle-"
+               "\\left\\langle\\frac{5}{2},\\frac{3}{2}|\\frac{5}{2}"
+               "\\frac{3}{2}\\right\\rangle\\right)";
+    }
+    return "";
+}
+
+std::string ETex ( short s )
+{
+    if ( ( s == 2 ) || ( s == 8 ) )
+    {
+        return "\n$E=\\left\\langle1,-1|1,1\\right\\rangle$";
+    }
+    else if ( ( s == 3 ) || ( s == 7 ) )
+    {
+        return "\n$E=\\frac{1}{\\sqrt{3}}\\left\\langle\\frac{3}{2},"
+               "-\\frac{1}{2}|\\frac{3}{2},\\frac{3}{2}"
+               "\\right\\rangle$";
+    }
+    else if ( ( s == 4 ) || ( s == 6 ) )
+    {
+        return "\n$E=\\frac{1}{\\sqrt{6}}\\left\\langle"
+               "2,0|2,2\\right\\rangle$";
+    }
+    else if ( s == 5 )
+    {
+        return "\n$E=\\frac{1}{\\sqrt{10}}\\left\\langle"
+               "\\frac{5}{2},\\frac{1}{2}|\\frac{5}{2},\\frac{5}{2}\\right\\rangle";
+    }
     return "";
 }
 
@@ -2254,7 +2313,9 @@ std::complex<double> LZSZ ( const CSFType & lhs, const CSFType & rhs, const std:
 std::string HInt (short s, short ms1, short ms2,
                     const std::vector<CSFType> & gs_csfs,
                     const std::vector<CSFType> & csfs,
-                    const std::vector<std::vector<bool>> & dets )
+                    const std::vector<std::vector<bool>> & dets,
+                    std::vector<bool> & intmat,
+                    std::vector<std::complex<double>> & intmatval )
 {
     std::string result = "";
     std::string tex_str = "";
@@ -2267,25 +2328,28 @@ std::string HInt (short s, short ms1, short ms2,
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
+            
             // <temp2|i> <i|temp1>
             // LXSX is always imaginary, so that
             // I*I = -1, and the complex conjugate is -1 * the rhs
             // So that no sign correction
 
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
+
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
-            std::cout << tex_str << "\n";
         }
-        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
+//        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
         {
             // <temp2|i> <i|temp1>
             // LXSX is always imaginary, so that we need no sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LXSX(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
@@ -2294,7 +2358,8 @@ std::string HInt (short s, short ms1, short ms2,
             // LXSX and LZSZ are always imaginary, so that
             // I*I = -1, and the complex conjugate is -1 * the rhs
             // So that no sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1);  
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
@@ -2304,28 +2369,32 @@ std::string HInt (short s, short ms1, short ms2,
         {
             // <temp2|i> <i|temp1>
             // LXSX is always imaginary, so that we need a sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1);  
             result += std::to_string(-std::imag(temp2)*std::real(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
+//        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
         {
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1);              
             result += std::to_string(std::real(temp2)*std::real(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
+//        temp1 = LYSY(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::real(temp1) > 0.01 || std::real(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
             // <temp2|i> <i|temp1>
             // LZSZ is always imaginary, so that we need a sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
             result += std::to_string(-std::imag(temp2)*std::real(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
-        temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
+//        temp2 = LZSZ(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::imag(temp2) > 0.01 || std::imag(temp2) < -0.01) )
         {
@@ -2334,17 +2403,19 @@ std::string HInt (short s, short ms1, short ms2,
             // LZSZ is always imaginary, so that
             // I*I = -1, and the complex conjugate is -1 * the rhs
             // So that no sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
-        temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
+//        temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
         temp2 = LYSY(csfs[i],gs_csfs[gs_index2],dets);
         if ( (std::imag(temp1) > 0.01 || std::imag(temp1) < -0.01) &&
              (std::real(temp2) > 0.01 || std::real(temp2) < -0.01) )
         {
             // <temp2|i> <i|temp1>
             // LZSZ is always imaginary, so that we need no sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
             result += std::to_string(std::real(temp2)*std::imag(temp1)) + "I ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
         temp1 = LZSZ(csfs[i],gs_csfs[gs_index1],dets);
@@ -2357,7 +2428,8 @@ std::string HInt (short s, short ms1, short ms2,
             // LXSX and LZSZ are always imaginary, so that
             // I*I = -1, and the complex conjugate is -1 * the rhs
             // So that no sign correction
-
+            intmat[i] = true;
+            intmatval[i] = temp2*std::conj(temp1); 
             result += std::to_string(std::imag(temp2)*std::imag(temp1)) + " ΔE(0-" + std::to_string(i) + ")^(-1)\n";
         }
     }
@@ -2779,13 +2851,13 @@ int main ()
 
     if ( s > 1 )
     {
-        ofile << "Model Interaction Matrix\\newline\\newline\n";
-        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
-        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
-        for ( unsigned int ms1 = s; ms1 >= -s; ms1-=2 )
-        {
-            ofile << "&\\left|" << std::to_string(int(s/2.0));
-        }
+//        ofile << "Model Interaction Matrix\\newline\\newline\n";
+//        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
+//        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
+//        for ( unsigned int ms1 = s; ms1 >= -s; ms1-=2 )
+//        {
+//            ofile << "&\\left|" << std::to_string(int(s/2.0));
+//        }
         std::cout << "\n\nNow let's build the Model Interaction Matrix for S=";
         std::cout << std::fixed << std::setprecision(1) << double(s/2.0) << ":\n\n";
 
@@ -2794,38 +2866,47 @@ int main ()
             for ( int ms2 = s; ms2 >= -s; ms2-=2 )
             {
                 std::cout << "<" << std::fixed << std::setprecision(1) << double(s/2.0);
-                ofile << "\\left\\langle" << std::fixed << std::setprecision(1) << double(s/2.0);
+//                ofile << "\\left\\langle" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
-                ofile << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
+//                ofile << "," << std::fixed << std::setprecision(1) << double(ms2/2.0);
                 std::cout << "|H(mod)|" << std::fixed << std::setprecision(1) << double(s/2.0);
-                ofile << "\\left|H_{mod}\\right|" << std::fixed << std::setprecision(1) << double(s/2.0);
+//                ofile << "\\left|H_{mod}\\right|" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
-                ofile << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
+//                ofile << "," << std::fixed << std::setprecision(1) << double(ms1/2.0);
                 std::cout << ">:\n";
-                if ( ms2 > -s ) ofile << "\\right\\rangle & ";
-                else ofile << "\\right\\rangle \\\\";
+//                if ( ms2 > -s ) ofile << "\\right\\rangle & ";
+//                else ofile << "\\right\\rangle \\\\";
                 std::cout << HModel(s,ms1,ms2) << "\n\n";
             }
         }
 
-        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
-        else ofile << "\\end{bmatrix}$\n}\\] = \n";
+//        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
+//        else ofile << "\\end{bmatrix}$\n}\\] = \n";
 
-        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
-        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
+//        if ( s < 3 ) ofile << "\\begin{equation*}\\begin{matrix}\n";
+//        else ofile << "\\[\n\\rotatebox{-90}{\n$\\begin{bmatrix}\n";
 
-        for ( int ms1 = s; ms1 >= -s; ms1-=2 )
-        {
-            for ( int ms2 = s; ms2 >= -s; ms2-=2 )
-            {
-                ofile << HModelTex(s,ms1,ms2);
-                if ( ms2 > -s ) ofile << " & ";
-                else ofile << " \\\\";
-            }
-        }
+//        for ( int ms1 = s; ms1 >= -s; ms1-=2 )
+//        {
+//            for ( int ms2 = s; ms2 >= -s; ms2-=2 )
+//            {
+//                ofile << HModelTex(s,ms1,ms2);
+//                if ( ms2 > -s ) ofile << " & ";
+//                else ofile << " \\\\";
+//            }
+//        }
 
-        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
-        else ofile << "\\end{bmatrix}$\n}\\] \n";
+//        if ( s < 3 ) ofile << "\\end{matrix}\\end{equation*} = \n";
+//        else ofile << "\\end{bmatrix}$\n}\\] \n";
+
+        std::vector<bool> intmat1(csfs.size(),false);
+        std::vector<std::complex<double>> intmat1val(csfs.size(),(0.0,0.0));
+        std::vector<bool> intmat2(csfs.size(),false);
+        std::vector<std::complex<double>> intmat2val(csfs.size(),(0.0,0.0));
+        std::vector<bool> intmat3(csfs.size(),false);
+        std::vector<std::complex<double>> intmat3val(csfs.size(),(0.0,0.0));
+        std::vector<bool> intmatdummy(csfs.size(),false);
+        std::vector<std::complex<double>> intmatdummyval(csfs.size(),(0.0,0.0));
 
         std::cout << "Now let's build the General Interaction Matrix:\n\n";
 
@@ -2838,11 +2919,288 @@ int main ()
                 std::cout << "|H(int)|" << std::fixed << std::setprecision(1) << double(s/2.0);
                 std::cout << "," << std::fixed << std::setprecision(1) << double(ms1/2.0) << "> ";
                 std::cout << std::fixed << std::setprecision(3) << -4.0/double(s*s) << " ζ^2 *\n";
-                std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets) << "\n\n";
+                if ( (ms2 == s) && (ms1 == s) )
+                {
+                    std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmat1,intmat1val);
+                    std::cout << "\n\n";
+                }
+                else if ( ( ms2 == (s-2) ) && ( ms1 == (s-2) ) )
+                {
+                    if ( s != 4 )
+                    {
+                        std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmat2,intmat2val);
+                        std::cout << "\n\n";
+                    }
+                    else
+                    {
+                        std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmatdummy,intmatdummyval);
+                        std::cout << "\n\n";
+                    }
+                }
+                else if ( ( ms2 == s ) && ( ms1 == (s-4) ) )
+                {
+                    std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmat3,intmat3val);
+                    std::cout << "\n\n";
+                }
+                else if ( ( ms2 == (s-4) ) && ( ms1 == (s-4) ) )
+                {
+                    if ( s == 4 )
+                    {
+                        std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmat2,intmat2val);
+                        std::cout << "\n\n";
+                    }
+                    else
+                    {
+                        std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmatdummy,intmatdummyval);
+                        std::cout << "\n\n";
+                    }
+                }
+                else
+                {
+                    std::cout << HInt(s,ms1,ms2,gs_csfs,csfs,dets,intmatdummy,intmatdummyval);
+                    std::cout << "\n\n";
+                }
             }
         }
 
-    }
+	    ofile << "For a multiplicity of " << s+1 << " we have the following:\\newline\n";
+	    ofile << DTex(s) << "\\newline\n";
+        ofile << ETex(s) << "\\newline\\newline\n";
+
+        double dprefactor = 0.0, eprefactor = 0.0;
+        if ( s == 2 ) 
+        {
+            dprefactor = 1.0;
+            eprefactor = 1.0;
+        }
+        else if ( s == 3 )
+        {
+            dprefactor = 0.5;
+            eprefactor = 1.0/std::sqrt(3);
+        }
+        else if ( s == 4 )
+        {
+            dprefactor = 0.25;
+            eprefactor = 1.0/std::sqrt(6);
+        }
+        else if ( s == 5 )
+        {
+            dprefactor = 0.25;
+            eprefactor = 1.0/std::sqrt(10);
+        }
+
+        unsigned int count(0);
+
+        ofile << "\\begin{equation*}\\begin{split}\\left\\langle";
+        if ( s != 2 ) 
+        {
+            ofile << Coeff_To_Tex(s/2.0) << ",";
+            ofile << Coeff_To_Tex(s/2.0) << "\\left|\\hat{H}_{eff}";
+            ofile << "\\right|" << Coeff_To_Tex(s/2.0) << ",";
+            ofile << Coeff_To_Tex(s/2.0) << "\\right\\rangle=&";
+        }
+        else
+        {
+            ofile << "1" << ",";
+            ofile << "1" << "\\left|\\hat{H}_{eff}";
+            ofile << "\\right|" << "1" << ",";
+            ofile << "1" << "\\right\\rangle=&";
+        }
+        
+        ofile << "-" << Coeff_To_Tex(4.0/double(s*s)) << "\\zeta^2\\left(\\right.\\\\";
+        for ( unsigned int i = 0; i < csfs.size(); i++ )
+        {
+            if ( intmat1[i] )
+            {
+                count++;
+                if ( std::abs(std::real(intmat1val[i])-0.0) < 1e-8 )
+                {
+                    if ( count == 1) ofile << "&";
+                    if ( std::imag(intmat1val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::imag(intmat1val[i])) << "i\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 6 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+                else
+                {
+                    if ( count == 1 ) ofile << "&";
+                    if ( std::real(intmat1val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::real(intmat1val[i])) << "\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 6 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+            }
+        }
+        ofile << "\\left.\\right)\\end{split}\\end{equation*}\\newline\n";
+
+        count = 0;
+
+        ofile << "\\begin{equation*}\\begin{split}\\left\\langle";
+        if ( s != 2 ) ofile << Coeff_To_Tex(s/2.0) << ",";
+        else ofile << "1,";
+        if ( s!= 4 ) ofile << Coeff_To_Tex((s-2)/2.0) << "\\left|\\hat{H}_{eff}";
+        else ofile << Coeff_To_Tex((s-4)/2.0) << "\\left|\\hat{H}_{eff}";
+        if ( s != 2 ) ofile << "\\right|" << Coeff_To_Tex(s/2.0) << ",";
+        else ofile << "\\right|1,";
+        if ( s!=4 ) ofile << Coeff_To_Tex((s-2)/2.0) << "\\right\\rangle=&";
+        else ofile << Coeff_To_Tex((s-4)/2.0) << "\\right\\rangle=&";
+        ofile << "-" << Coeff_To_Tex(4.0/double(s*s)) << "\\zeta^2\\left(\\right.\\\\";
+        for ( unsigned int i = 0; i < csfs.size(); i++ )
+        {
+            if ( intmat2[i] )
+            {
+                count++;
+                if ( std::abs(std::real(intmat2val[i])-0.0) < 1e-8 )
+                {
+                    if ( count == 1) ofile << "&";
+                    if ( std::imag(intmat2val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::imag(intmat2val[i])) << "i\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 6 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+                else
+                {
+                    if ( count == 1 ) ofile << "&";
+                    if ( std::real(intmat2val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::real(intmat2val[i])) << "\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 6 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+            }
+        }
+        ofile << "\\left.\\right)\\end{split}\\end{equation*}\\newline\n";
+
+        count = 0;
+
+        ofile << "\\begin{equation*}\\begin{split}\\left\\langle";
+        if (s != 2 ) 
+        {
+            ofile << Coeff_To_Tex(s/2.0) << ",";
+            ofile << Coeff_To_Tex((s-4)/2.0) << "\\left|\\hat{H}_{eff}";
+            ofile << "\\right|" << Coeff_To_Tex(s/2.0) << ",";
+            ofile << Coeff_To_Tex((s-4)/2.0) << "\\right\\rangle=&";
+        }
+        else 
+        {
+            ofile << "1,-1\\left|\\hat{H}_{eff}\\right|1,-1\\right\\rangle=&";
+        }
+        ofile << "-" << Coeff_To_Tex(4.0/double(s*s)) << "\\zeta^2\\left(\\right.\\\\";
+        for ( unsigned int i = 0; i < csfs.size(); i++ )
+        {
+            if ( intmat3[i] )
+            {
+                count++;
+                if ( std::abs(std::real(intmat3val[i])-0.0) < 1e-8 )
+                {
+                    if ( count == 1) ofile << "&";
+                    if ( std::imag(intmat3val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::imag(intmat3val[i])) << "i\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 5 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+                else
+                {
+                    if ( count == 1 ) ofile << "&";
+                    if ( std::real(intmat3val[i]) > 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::real(intmat3val[i])) << "\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 5 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+            }
+        }
+        ofile << " \\left.\\right)\\end{split}\\end{equation*}\\newline\n";  
+
+        count = 0;
+
+        ofile << "\\begin{equation*}\\begin{split}";
+        ofile << "D=&" << Coeff_To_Tex(4.0/double(s*s)*dprefactor) << "\\zeta^2";
+        ofile << "\\left(\\right.\\\\";
+
+        for ( unsigned int i = 0; i < csfs.size(); i++ )
+        {
+            double diff = std::real(intmat2val[i]-intmat1val[i]);
+            if ( std::abs(diff-0.0) > 1e-8 )
+            {
+                count++;
+                if ( count == 1 ) ofile << "&";
+                if ( diff > 0 ) ofile << "+"; 
+                ofile << diff << "\\Delta_{" << i+1 << "}^{-1}";
+                if ( count == 6 )
+                {
+                    ofile << "\\\\";
+                    count = 0;
+                }
+            }
+        }
+
+        ofile << "\\left.\\right)\\end{split}\\end{equation*}\\newline\n";
+
+        count = 0;
+
+        ofile << "\\begin{equation*}\\begin{split}";
+        ofile << "E=&" << Coeff_To_Tex(4.0/double(s*s)*eprefactor) << "\\zeta^2";
+        ofile << "\\left(\\right.\\\\";
+
+        for ( unsigned int i = 0; i < csfs.size(); i++ )
+        {
+            if ( intmat3[i] )
+            {
+                count++;
+                if ( std::abs(std::real(intmat3val[i])-0.0) < 1e-8 )
+                {
+                    if ( count == 1) ofile << "&";
+                    if ( std::imag(intmat3val[i]) < 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::imag(-intmat3val[i])) << "i\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 5 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+                else
+                {
+                    if ( count == 1 ) ofile << "&";
+                    if ( std::real(intmat3val[i]) < 0 ) ofile << "+";
+                    ofile << Coeff_To_Tex(std::real(-intmat3val[i])) << "\\Delta_{";
+                    ofile << i+1 << "}^{-1}";
+                    if ( count == 5 ) 
+                    {
+                        ofile << "\\\\";
+                        count = 0;
+                    }
+                }
+            }
+        }
+
+        ofile << "\\left.\\right)\\end{split}\\end{equation*}\\newline\n";
+
+    } 
+  
 
     ofile << "\\end{document}\n";
     ofile.close();
