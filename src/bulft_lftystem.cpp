@@ -165,7 +165,7 @@ void LFTSystem::generateDeterminants()
         // ── Record this combination ───────────────────────────────────────
         Determinant& d = dets_[idx++];
         d.occ.fill(false);
-        for (int k : combo) d.occ[k] = true;
+        for (int k : combo) d.occ[k] = true; 
 
         // ── Advance to the next combination in lexicographic order ────────
         // Find the rightmost position that can still be incremented
@@ -178,3 +178,332 @@ void LFTSystem::generateDeterminants()
             combo[j] = combo[j - 1] + 1;
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private: setDetProperties
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Compute ms (2 × M_S) and config (electrons per spatial orbital) for every
+ * Slater determinant.
+ */
+
+void LFTSystem::setDetProperties()
+{
+    for (Determinant& d : dets_)
+    {
+        d.ms = 0;
+        d.config.fill(0);
+        for (int k = 0; k < N_SPINORBS; ++k)
+        {
+            if (!d.occ[k]) continue;
+            // Even index ≡ alpha (+1/2 contribution), odd ≡ beta (−1/2)
+            d.ms += (k % 2 == 0) ? 1 : -1;
+            d.config[k / 2]++;   // spatial orbital index = k/2
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private: generateCouplingVecs
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Enumerate all coupling vectors of length k (for each valid k) that produce
+ * the target spin twoSpin.
+ *
+ * A coupling vector encodes, for each successive unpaired electron,
+ * whether it was added as +1/2 (true) or −1/2 (false).
+ *
+ * Pruning: if the running intermediate spin goes negative at any prefix,
+ * that prefix cannot lead to a valid vector and is discarded early.
+ */
+std::vector<std::vector<bool>>
+LFTSystem::generateCouplingVecs(short twoSpin, short nel)
+{
+    // Particle-hole symmetry: use the smaller of nel or (10−nel) unpaired count
+    const short nUnpaired = (nel > 5) ? static_cast<short>(10 - nel) : nel;
+    std::vector<std::vector<bool>> coups;
+
+    for (int k = nUnpaired; k >= twoSpin; k -= 2)
+    {
+        // Enumerate all 2^k bit patterns
+        const int total = 1 << k;
+        std::vector<bool> temp(k);
+
+        for (int i = 0; i < total; ++i)
+        {
+            short runSpin = 0;
+            bool  valid   = true;
+
+            for (int j = k - 1; j >= 0; --j)
+            {
+                temp[k - j - 1] = ((i >> j) & 1) != 0;
+                runSpin += temp[k - j - 1] ? 1 : -1;
+
+                // Prune: intermediate spin must remain non-negative
+                if (runSpin < 0) { valid = false; break; }
+            }
+
+            if (valid && runSpin == twoSpin)
+                coups.push_back(temp);
+        }
+    }
+    return coups;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private: generateCoeffs
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Compute the Clebsch–Gordan expansion coefficients for a CSF.
+ *
+ * For each determinant in the CSF, the coefficient is the product of
+ * Clebsch–Gordan factors for each unpaired orbital, applied in order.
+ * The running spin (st2) and projection (mt2) are updated at each step
+ * to reflect the cumulative effect of adding one electron at a time.
+ *
+ * This replaces the original approach of storing and re-parsing
+ * coefficient strings with direct CSF::setCoeff() calls.
+ */
+void LFTSystem::generateCoeffs(CSF&                             csf,
+                                const std::array<short, N_ORBS>& config,
+                                short                            twoSpin,
+                                const std::vector<bool>&         cpl)
+{
+    // Single-determinant CSFs have a trivial coefficient of 1.0 — no work needed
+    if (csf.count() <= 1) return;
+
+    for (int i = 0; i < csf.count(); ++i)
+    {
+        const Determinant& det = dets_[csf.getIndex(i)];
+        double total   = 1.0;
+        short  st2     = 0;   // running 2*S_total after each coupling step
+        short  mt2     = 0;   // running 2*M_total after each coupling step
+        int    cplIdx  = 0;   // position in the coupling vector
+
+        for (int j = 0; j < N_ORBS; ++j)
+        {
+            if (config[j] != 1) continue; // only unpaired (singly-occupied) orbitals
+
+            // Update total spin for this coupling step
+            if (cpl[cplIdx]) st2++;
+            else             st2--;
+
+            // Alpha spin-orbital (2j) is occupied ⟺ this orbital has ms = +1/2
+            const bool alphaOcc = det.occ[2 * j];
+            if (alphaOcc)
+            {
+                mt2++;
+                total *= clebsch(cpl[cplIdx], true,  st2, mt2);
+            }
+            else
+            {
+                mt2--;
+                total *= clebsch(cpl[cplIdx], false, st2, mt2);
+            }
+            cplIdx++;
+        }
+
+        csf.setCoeff(i, total);
+    }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private: generateCSFs
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Build all CSFs for all spin multiplicities.
+ *
+ * Outer loop: each 2S value in spins_
+ *   Middle loop: each coupling vector for this spin
+ *     Inner loop: each M_S from +S to −S
+ *       Find all determinants with this M_S whose unpaired-orbital count
+ *       matches the coupling vector length.  Group determinants sharing
+ *       the same spatial configuration into one CSF.
+ *       Call generateCoeffs() to set the Clebsch–Gordan coefficients.
+ */
+ void LFTSystem::generateCSFs()
+ {
+     csfs_.resize(totalCSFCount_);
+     int csfIndex = 0;
+ 
+     for (short twoSpin : spins_)
+     {
+         // ── Generate and display coupling vectors for this spin ───────────
+         std::vector<std::vector<bool>> couplingVecs =
+             generateCouplingVecs(twoSpin, nel_);
+ 
+         std::cout << "There are " << couplingVecs.size()
+                   << " coupling vectors for S="
+                   << std::fixed << std::setprecision(1)
+                   << twoSpin / 2.0 << "\n   ";
+ 
+         for (const auto& cv : couplingVecs)
+         {
+             std::cout << " |";
+             for (bool b : cv) std::cout << (b ? '+' : '-');
+             std::cout << '>';
+         }
+         std::cout << "\n\n";
+ 
+         // ── For each coupling vector ──────────────────────────────────────
+         for (const auto& cpl : couplingVecs)
+         {
+             // ── For each M_S projection ───────────────────────────────────
+             for (short ms = twoSpin; ms >= -twoSpin; ms -= 2)
+             {
+                 // Track which dets have already been assigned to a CSF
+                 std::vector<bool> assigned(nDets_, false);
+ 
+                 // ── Scan determinants for an unassigned seed ──────────────
+                 for (int i = 0; i < nDets_; ++i)
+                 {
+                     if (dets_[i].ms != ms || assigned[i]) continue;
+ 
+                     // Count singly-occupied spatial orbitals
+                     int nUnpaired = 0;
+                     for (short cnt : dets_[i].config)
+                         if (cnt == 1) nUnpaired++;
+ 
+                     // Skip if coupling vector length does not match
+                     if (static_cast<int>(cpl.size()) != nUnpaired) continue;
+ 
+                     // ── Start a new CSF seeded with determinant i ─────────
+                     CSF tcsf(twoSpin);
+                     tcsf.addDet(i, 1.0);
+                     assigned[i] = true;
+ 
+                     // Find all determinants with the same config and M_S
+                     for (int j = i + 1; j < nDets_; ++j)
+                     {
+                         if (dets_[j].ms != ms || assigned[j]) continue;
+ 
+                         // std::array::operator== compares element-by-element
+                         if (dets_[i].config == dets_[j].config)
+                         {
+                             tcsf.addDet(j, 1.0);
+                             assigned[j] = true;
+                         }
+                     }
+ 
+                     // Compute Clebsch–Gordan coefficients for this CSF
+                     generateCoeffs(tcsf, dets_[i].config, twoSpin, cpl);
+ 
+                     csfs_[csfIndex++] = std::move(tcsf);
+                 }
+             }
+         }
+     }
+ }
+
+ // ─────────────────────────────────────────────────────────────────────────────
+// Private: findGSCSFs
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Identify the ground-state CSF manifold.
+ *
+ * A CSF belongs to the ground-state manifold when:
+ *   1. Its total spin equals twoS_ (the highest spin for d^nel).
+ *   2. Its first determinant has the same spatial configuration as gsConfig_.
+ *
+ * The (twoS_+1) ground-state CSFs are stored in gsCSFs_ ordered by M_S
+ * descending (i.e. gsCSFs_[0] has M_S = +S) so that the index formula
+ * gsCSFs_[(twoS − ms)/2] gives the correct CSF for any ms.
+ */
+void LFTSystem::findGSCSFs()
+{
+    // Reserve exactly (twoS_+1) slots — one per M_S projection
+    gsCSFs_.resize(twoS_ + 1);
+    gsCSFIndices_.resize(twoS_ + 1);
+    int gsIndex = 0;
+
+    for (int i = 0; i < totalCSFCount_; ++i)
+    {
+        // Must have the ground-state spin
+        if (csfs_[i].spin() != twoS_) continue;
+
+        // First determinant must match the ground-state spatial config
+        const Determinant& firstDet = dets_[csfs_[i].getIndex(0)];
+        if (firstDet.config == gsConfig_)
+        {
+            gsCSFs_[gsIndex]       = csfs_[i];
+            gsCSFIndices_[gsIndex] = i;
+            ++gsIndex;
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Public: computeGTensor
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Compute G-tensor contributions for one axis using the highest-Ms
+ * ground-state CSF (gsCSFs_[0]) as the bra.
+ *
+ * Δg_αα = −(2/S) ζ Σ_n |Im⟨GS,S|L_α|n⟩|² / ΔE(0→n) if there are <=
+ *         electrons
+ *
+ * This function returns the |Im⟨GS|L_α|n⟩|² factors; the prefactor
+ * and energy denominators are applied by the caller (LaTeXWriter).
+ */
+// LFTSystem.cpp
+
+std::vector<GTensorContrib> LFTSystem::computeGTensor(char axis) const
+{
+    std::vector<GTensorContrib> contribs;
+    for (int i = 0; i < totalCSFCount_; ++i)
+    {
+        std::complex<double> val;
+        switch (axis) {
+            case 'x': val = AngularMomentum::Lx(gsCSFs_[0], csfs_[i], dets_); break;
+            case 'y': val = AngularMomentum::Ly(gsCSFs_[0], csfs_[i], dets_); break;
+            case 'z': val = AngularMomentum::Lz(gsCSFs_[0], csfs_[i], dets_); break;
+        }
+
+        // Use norm() which is |a + bi|² = a² + b²
+        double normSq = std::norm(val); 
+
+        if (normSq > 1e-12) // Lower threshold for energy-squared
+        {
+            // Store the complex value (or its magnitude)
+            contribs.push_back({i, std::abs(val), normSq});
+        }
+    }
+    return contribs;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Public: computeZFSIntMatrix
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Compute one element of the second-order spin Hamiltonian matrix:
+ *
+ *   ⟨ms2|H_eff|ms1⟩ = −(4/S²) ζ² Σ_n  result.values[n] / ΔE(0→n)
+ *
+ * Delegates to AngularMomentum::computeHInt(), which evaluates all nine
+ * (LxSx, LySy, LzSz) operator-product combinations and accumulates
+ * contributions per excited state n.
+ */
+ ZFSIntMatrix LFTSystem::computeZFSIntMatrix(short ms1, short ms2) const
+ {
+     ZFSIntMatrix result;
+ 
+     // Initialise contribution arrays to "no contribution"
+     result.hasContrib.assign(totalCSFCount_, false);
+     result.values.assign(totalCSFCount_, std::complex<double>(0.0, 0.0));
+ 
+     // Delegate the heavy lifting to the AngularMomentum namespace
+     result.textOutput = AngularMomentum::computeHInt(
+         twoS_, ms1, ms2,
+         gsCSFs_, csfs_, dets_,
+         result.hasContrib, result.values);
+ 
+     return result;
+ }
