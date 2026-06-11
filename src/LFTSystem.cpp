@@ -418,7 +418,7 @@ void LFTSystem::findGSCSFs()
     gsCSFIndices_.resize(twoS_ + 1);
     int gsIndex = 0;
 
-    for (int i = 0; i < totalCSFCount_; ++i)
+    for (int i = 0; i < totalCSFCount_; ++i) 
     {
         // Must have the ground-state spin
         if (csfs_[i].spin() != twoS_) continue;
@@ -467,7 +467,7 @@ std::vector<GTensorContrib> LFTSystem::computeGTensor(char axis) const
         if (normSq > 1e-12) // Lower threshold for energy-squared
         {
             // Store the complex value (or its magnitude)
-            contribs.push_back({i, std::abs(val), normSq});
+            contribs.push_back({i, std::imag(val), normSq});
         }
     }
     return contribs;

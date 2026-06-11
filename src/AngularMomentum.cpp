@@ -114,6 +114,9 @@ static std::complex<double> applyOneBodyOp(
             {
                 if (dets[lhs.getIndex(i)] == modified)
                 {
+                    // Inside applyOneBodyOp
+std::complex<double> term = tr.matElem * (double(perm) * lhs.getCoeff(i) * rCoeff);
+
                     total += tr.matElem *
                              (double(perm) * lhs.getCoeff(i) * rCoeff);
                 }
@@ -166,7 +169,7 @@ static const std::vector<SpinOrbTransition> kLyTable = {
     // yz(α) → xy(α): ⟨xy|Ly|yz⟩ = +i
     {2, 4, {0.0, +1.0}},
     {3, 5, {0.0, +1.0}},
-    // xy(α) → yz(α): ⟨yz|Ly|xy⟩ = -i  (Hermitian conjugate)
+    // xy(α) → yz(α): ⟨yz|Ly|xy⟩ = -i  (Hermitian conjugate) 
     {4, 2, {0.0, -1.0}},
     {5, 3, {0.0, -1.0}},
     // z²(α) → xz(α): ⟨xz|Ly|z²⟩ = +√3·i

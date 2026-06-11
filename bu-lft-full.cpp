@@ -107,6 +107,7 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "3.0000" ) return sign+"3";
     else if ( tstring == "4.0000" ) return sign+"4";
     else if ( tstring == "4.4721" ) return sign+"2\\sqrt{5}";
+    else if ( tstring == "6.0000" ) return sign+"6";
     return "";
 }
 
@@ -563,7 +564,6 @@ void GenerateDeterminants ( std::vector< std::vector <bool> > & dets,
                             const short & nel
                           )
 {
-
     unsigned int index = 0;
     for ( unsigned int e1 = 0; e1 < 10; e1++ )
     {
@@ -608,7 +608,7 @@ void GenerateDeterminants ( std::vector< std::vector <bool> > & dets,
                                                                         for ( unsigned int e9 = e8+1; e9 < 10; e9++ )
                                                                         {
                                                                             std::vector<bool> temp(10,false);
-                                                                            temp[e1] = temp[e2] = temp[e3] = temp[e4] = temp[e5] = temp[e6] = temp[e7] = temp[e8] = true;
+                                                                            temp[e1] = temp[e2] = temp[e3] = temp[e4] = temp[e5] = temp[e6] = temp[e7] = temp[e8] = temp[e9] = true;
                                                                             dets[index] = temp;
                                                                             index++;
                                                                         }
@@ -827,7 +827,6 @@ void GenerateCSFS (
             {
                 std::vector<bool> found(n_dets,false);
                 std::vector<short> tconfig(5,0);
-                
                 for ( unsigned int i = 0; i < n_dets; i++ )
                 {
                     if ( ( ms == det_ms[i] ) && ( !found[i] ) )

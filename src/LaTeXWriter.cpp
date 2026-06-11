@@ -17,6 +17,7 @@
 
 #include <cmath>              // std::sqrt, std::abs
 #include <iomanip>            // std::setprecision
+#include <iostream>
 #include <sstream>            // std::ostringstream
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -275,16 +276,16 @@ void LaTeXWriter::writeGComponent(char axis)
         const double result = c.matElemIm;  // signed imaginary part
 
         ofile_ << "$\\left\\langle";
-        ofile_ << (i + 1) << ",";
-        ofile_ << spinLabel(csfs[i].spin());  // spin of excited state n
-        ofile_ << "," << gsSpinLabel;          // GS M_S (= S for highest Ms)
-        ofile_ << "\\left|" << opName << "\\right|";
         ofile_ << (gsIndices[0] + 1) << ",";
         ofile_ << gsSpinLabel << ",";
         ofile_ << gsSpinLabel;
+        ofile_ << "\\left|" << opName << "\\right|";
+        ofile_ << (i + 1) << ",";
+        ofile_ << spinLabel(csfs[i].spin());  // spin of excited state n 
+        ofile_ << "," << gsSpinLabel;          // GS M_S (= S for highest Ms)
         ofile_ << "\\right\\rangle=";
         // Imaginary matrix element: print the coefficient (with sign) followed by I
-        ofile_ << coeffToTex(-result) << "I$\\newline\n";
+        ofile_ << coeffToTex(result) << "I$\\newline\n";
     }
 
     // ── Write Δg component terms ───────────────────────────────────────────
