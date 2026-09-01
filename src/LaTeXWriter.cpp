@@ -356,7 +356,6 @@ void LaTeXWriter::writeZFSSection()
     const short ms22 = ms12;
 
     //  zfs3: off-diagonal element used for E
-    //   ms1 = S-2 (in ×2 units: twoS-4),  ms2 = S (twoS)
     const short ms1_3 = short(twoS - 4), ms2_3 = twoS;
 
     // ── Compute the three integral matrices ───────────────────────────────
@@ -373,15 +372,13 @@ void LaTeXWriter::writeZFSSection()
     // Second equation: ⟨S, Ms12 | H_eff | S, Ms12⟩
     const std::string label2 = sLabel + "," + spinLabel(ms12);
 
-    // Third equation bra/ket uses ms1_3 = twoS-4; special-cased for S=1
-    std::string label3;
-    if (twoS == 2) label3 = "1,-1";          // ⟨1,-1|H_eff|1,-1⟩
-    else           label3 = sLabel + "," + spinLabel(ms1_3);
+    // Third equation bra/ket uses ms1_3 = twoS-4; special-cased for S=3/2
+    const std::string label3 = sLabel + "," + spinLabel(ms1_3);
 
     // ── Write the three ZFS equations ─────────────────────────────────────
     writeZFSEquation(zfs1, label1, label1, twoS, 6);
     writeZFSEquation(zfs2, label2, label2, twoS, 6);
-    writeZFSEquation(zfs3, label3, label3, twoS, 5);
+    writeZFSEquation(zfs3, label3, label1, twoS, 5);
 
     // ── D and E expressions ───────────────────────────────────────────────
     const double dCoeff = 4.0 / double(twoS * twoS) * dprefactor;
@@ -496,7 +493,7 @@ void LaTeXWriter::writeDExpression(const ZFSIntMatrix& zfs1,
 
         // Write the raw numeric value — not coeffToTex — since diffs are
         // physical quantities that may not be recognisable rational numbers.
-        ofile_ << diff << "\\Delta_{" << (i + 1) << "}^{-1}";
+        ofile_ << coeffToTex(diff) << "\\Delta_{" << (i + 1) << "}^{-1}";
 
         if (count == 6)
         {

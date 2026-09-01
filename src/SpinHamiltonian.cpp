@@ -49,7 +49,7 @@ std::string DTex(short twoS)
                "\\frac{5}{2},\\frac{5}{2}|\\frac{5}{2},"
                "\\frac{5}{2}\\right\\rangle-"
                "\\left\\langle\\frac{5}{2},\\frac{3}{2}|\\frac{5}{2}"
-               "\\frac{3}{2}\\right\\rangle\\right)";
+               "\\frac{3}{2}\\right\\rangle\\right)$";
     }
     return "";
 }
@@ -78,7 +78,7 @@ std::string ETex(short twoS)
     // S = 5/2:  E = (1/√10)⟨5/2,1/2|5/2,5/2⟩
     case 5:
         return "\n$E=\\frac{1}{\\sqrt{10}}\\left\\langle"
-               "\\frac{5}{2},\\frac{1}{2}|\\frac{5}{2},\\frac{5}{2}\\right\\rangle";
+               "\\frac{5}{2},\\frac{1}{2}|\\frac{5}{2},\\frac{5}{2}\\right\\rangle$";
     }
     return "";
 }

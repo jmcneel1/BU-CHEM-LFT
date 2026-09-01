@@ -108,6 +108,7 @@ std::string Coeff_To_Tex ( const double & coeff )
     else if ( tstring == "4.0000" ) return sign+"4";
     else if ( tstring == "4.4721" ) return sign+"2\\sqrt{5}";
     else if ( tstring == "6.0000" ) return sign+"6";
+    else if ( tstring == "8.0000" ) return sign+"8";
     return "";
 }
 
