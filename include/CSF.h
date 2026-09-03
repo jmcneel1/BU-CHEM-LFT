@@ -9,14 +9,6 @@
  *
  * where {D_i} is a subset of the full determinant list and {c_i} are
  * Clebsch–Gordan expansion coefficients.
- *
- * Design notes
- * ────────────
- * The original CSFType stored determinant indices and coefficients as
- * delimiter-separated strings (e.g.  "3-7-12" and "0.5774_-0.5774_0.5774"),
- * requiring O(n) string parsing every time an index or coefficient was needed.
- * This class stores them as std::vector<int> and std::vector<double>,
- * giving O(1) random access and eliminating GetIndex() / GetCoeff().
  */
 #pragma once
 
