@@ -15,15 +15,7 @@
  * ──────────────
  * Each operator is defined by a static table of SpinOrbTransition entries.
  * A single generic kernel (applyOneBodyOp) applies any such table,
- * automatically computing the Fermi anticommutation sign.  This replaces
- * ~1 600 lines of duplicated if-else code with ~280 lines of data + kernel.
- *
- * Bug fix in LySy
- * ───────────────
- * The original LYSY function computed the anticommutation permutation sign
- * for the transitions {xz(β)→z²(α)} and {xz(β)→x²-y²(α)} but did not
- * apply it.  The generic kernel always applies the permutation sign, fixing
- * this inconsistency.
+ * automatically computing the Fermi anticommutation sign.  
  */
 #pragma once
 
